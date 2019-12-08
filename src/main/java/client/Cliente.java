@@ -21,8 +21,10 @@ public class Cliente implements EventosUsuario {
         	
         	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
         	this.scn = new Scanner(System.in);
-        	 this.usuario.setEventos(this);
-        	 
+        	this.usuario.setEventos(this);
+        	
+        	enviarDatosUsuario();
+        	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}       
@@ -46,6 +48,19 @@ public class Cliente implements EventosUsuario {
     	
     }
     
+    public void enviarDatosUsuario() {
+    	
+    	// Enviar datos del cliente
+    	System.out.println("Nombre de usuario:");
+    	String nombre = scn.nextLine();
+    	
+    	if(!nombre.isEmpty())
+    		this.usuario.setNombre(nombre);
+    	
+    	// Enviar datos del cliente
+		this.usuario.getConexion().send("@INFO name:" + nombre);
+    	
+    }
     
     // GETTERS & SETTERS
     public Usuario getUsuario() {

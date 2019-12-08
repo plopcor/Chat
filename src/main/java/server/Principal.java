@@ -16,11 +16,14 @@ public class Principal {
 
 			try {
 				port = scn.nextInt();
+				
 			} catch (InputMismatchException e) {
-				System.err.println("Numero de puerto no valido, valido: 0 a 65535");
+				System.err.println("Numero de puerto no valido, valido de 0 a 65535");
 				port = -1;
 			}
 
+			scn.nextLine();
+			
 		} while (port < 0);
 		
 		// Iniciar servidor

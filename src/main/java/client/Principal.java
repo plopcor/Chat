@@ -17,24 +17,26 @@ public class Principal {
 		// Pedir IP i puerto del servidor
 		do {
 
-			System.out.println("IP del servidor:");
+			System.out.print("\nIP del servidor: ");
 			
 			try {
 				ip = InetAddress.getByName(scn.nextLine());
+				
 			} catch (UnknownHostException e) {
-				e.printStackTrace();
+				System.err.println("[Error] IP no valida");
+				//e.printStackTrace();
 				ip = null;
 			}
 		} while(ip == null);
 		
 		do {
 			
-			System.out.println("Port:");
+			System.out.print("Port: ");
 			
 			try {
 				port = scn.nextInt();
 			} catch (InputMismatchException e) {
-				System.err.println("Numero de puerto no valido");
+				System.err.println("\nNumero de puerto no valido");
 				port = -1;
 				scn.nextLine();
 			}
@@ -49,7 +51,7 @@ public class Principal {
 		try {
 			
 			client = new Cliente(ip, port);
-			System.out.println("Conectado al servidor: " + client.getUsuario().getConexion().getSocket().getInetAddress());
+			System.out.println("[Conectado] Servidor: " + client.getUsuario().getConexion().getSocket().getInetAddress());
 			client.start();
 			
 		} catch (Exception e) {

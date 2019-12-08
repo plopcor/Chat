@@ -41,7 +41,6 @@ public class Backend implements EventosUsuario {
     }
     
     public void desconectarUsuario(Usuario usuario) {
-    	System.out.println("Usuario en lista ?? " + (usuarios.contains(usuario) ? "SI" : "NO"));
     	if (usuarios.remove(usuario))
     		emitirMensaje(usuario.getConexion().getIP() + " desconectado");
     }
@@ -58,23 +57,50 @@ public class Backend implements EventosUsuario {
 		for(Usuario u : usuarios)
 			if(usuario != u)
 				u.getConexion().send(mensaje);
-			else
-				u.getConexion().send("Eres el emisor");
 	}
 
+	public void procesarMensaje(Usuario usuario, String mensaje) {
+
+		// Si empieza con @INFO, es datos sobre el usuario
+		if(mensaje.startsWith("@INFO")) {
+			
+			// Datos del usuario
+			
+			// Quitar identificador de tipo de mensaje
+			mensaje = mensaje.replace("@INFO", "").trim();
+
+			if(mensaje.contains(":")) {
+				String[] msg = mensaje.split(":");
+				
+				// Ver que informacion se quiere poner
+				switch(msg[0]) {
+					case "name":
+						usuario.setNombre(msg[1]);
+						break;
+				}
+			}
+			
+		} else if (mensaje.startsWith("/")) {
+			
+			// Comandos
+			
+		} else {
+			
+			// Mensaje normal
+			System.out.println("[" + usuario.getConexion().getIP() + "] (" + usuario.getNombre() + "): " + mensaje);
+			emitirMensajeRecibido(usuario, mensaje);
+		}
+		
+	}
 
 	// EVENTOS
 	public void onMensajeRecibido(Usuario usuario, String mensaje) {
-		System.out.println("[" + usuario.getConexion().getIP() + "]: " + mensaje);
-		emitirMensaje(mensaje);
-		//emitirMensajeRecibido(usuario, mensaje);
+		procesarMensaje(usuario, mensaje);
 	}
 	
 	public void onDesconectado(Usuario usuario) {
-		System.out.println("[" + usuario.getConexion().getIP() + "] desconectado");
+		System.out.println("" + usuario.getConexion().getIP() + " desconectado");
 		desconectarUsuario(usuario);
 	}
-	
-	//public void emitirMensaje(String mensaje, ArrayList<Usuario> usuariosExcluidos)
 	
 }

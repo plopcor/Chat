@@ -36,6 +36,7 @@ public class Conexion implements Runnable {
 	// METODOS
 	//
 	public void start() {
+		// Empezar lectura
 		this.readThread = new Thread(this);
 		this.readThread.start();
 	}
@@ -52,24 +53,23 @@ public class Conexion implements Runnable {
 
 			try {
 				
+				// Leer datos
 				data = in.readLine();
 
 				// Accionar evento
 				if(eventos != null)
 					this.eventos.onMensajeEnviado(data);
-				//Backend.mensajeRecibido(this, data);
 
 			} catch (SocketException e) {
 				
 				// Si el usuaro se desconecta
 				if(eventos != null)
 					this.eventos.onDesconectado();
-				//Backend.desconectarUsuario(this);
 				data = null;
 				
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.err.println("[Error] " + this.getIP() + " => Error al leer datos del cliente");
+				System.err.println("[Error] Error al leer datos del cliente (" + this.getIP() + ")");
 				data = null;
 			}
 

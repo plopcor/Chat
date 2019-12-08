@@ -4,14 +4,19 @@ import java.net.Socket;
 
 public class Usuario implements EventosConexion {
 
+	private String nombre;
 	private Conexion conexion;
 	private EventosUsuario eventos;
 	
 	public Usuario(Socket socketCliente) {
 
+		this.nombre = "Anonimo";
 		this.conexion = new Conexion(socketCliente);
 		this.conexion.setEventos(this);
-		// Leer informacio que envie el cliente al principio		
+		
+		// Leer informacio que envie el cliente al principio
+
+		
 	}
 
 	// METODOS
@@ -24,10 +29,21 @@ public class Usuario implements EventosConexion {
 	}
 	
 	// GETTERS & SETTERS
+	public String getNombre() {
+		return this.nombre;
+	}
+	
+	public void setNombre(String nombre) {
+		if(nombre.length() > 35)
+			nombre = nombre.substring(0, 35);
+		else if (nombre.length() == 0)
+			nombre = "Anonimo";
+		this.nombre = nombre;
+	}
+	
 	public Conexion getConexion() {
 		return this.conexion;
 	}
-
 	public void setEventos(EventosUsuario eventos) {
 		this.eventos = eventos;
 	}
