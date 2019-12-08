@@ -1,17 +1,16 @@
 package server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+
+import classes.Usuario;
 
 public class Servidor {
 	
     private ServerSocket server;
-    private ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+    private Backend backend;
     
     public Servidor(String ipAddress, int port) {
     	
@@ -24,10 +23,13 @@ public class Servidor {
     	} catch (Exception e) {
     		System.err.println("Error al crear el servidor " + e.getMessage());
     	}
+    	
+    	backend = Backend.getInstance();
     }
     
+    
     public void listen() {
-        
+    	
         Socket cliente = null;
         
         do {
@@ -40,21 +42,15 @@ public class Servidor {
 				// Crear nuevo cliente conectado
 				Usuario usuarioConectado = new Usuario(cliente);
 				
-				// Si el usuario se conecta correctamente
-				if(usuarioConectado != null) {
-					System.out.println("Cliente connectado: " + usuarioConectado.getIP());
-					
-					// Empezar a leer datos
-					usuarioConectado.start();
-					
-					usuarios.add(usuarioConectado);
-				}
+				// Añadir a la lista i empezar a leer datos
+				backend.conectarUsuario(usuarioConectado);
 				
 			} catch (IOException e) {
+				System.err.println("Error al aceptar conexion de un cliente");
 				e.printStackTrace();
 			}
 			
-        } while(true);
+        } while (true);
     }
     
     

@@ -6,40 +6,61 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Cliente {
+import classes.Conexion;
+import classes.EventosConexion;
+import classes.EventosUsuario;
+import classes.Usuario;
 
-	private Socket socket;
-    private Scanner scanner;
+public class Cliente implements EventosUsuario {
+
+	private Usuario usuario;
+    private Scanner scn;
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         try {
-			this.socket = new Socket(serverAddress, serverPort);
-			 this.scanner = new Scanner(System.in);
+        	
+        	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
+        	this.scn = new Scanner(System.in);
+        	 this.usuario.setEventos(this);
+        	 
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}       
     }
     
     public void start() {
-        String input;
-        
+    	// Empezar lectura
+    	this.usuario.start();
+    	
+    	String input;
+    	PrintWriter out = new PrintWriter(this.getUsuario().getConexion().getOutputWriter(), true);
+
+		// Enviar datos
         while (true) {
-        
-        	input = scanner.nextLine();
+
+        	input = scn.nextLine();
             
-        	PrintWriter out = null;
-			try {
-				out = new PrintWriter(this.socket.getOutputStream(), true);
-				out.println(input);
-	            out.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+        	out.println(input);
+	        out.flush();
         }
+    	
     }
     
-    public Socket getSocket() {
-    	return this.socket;
+    
+    // GETTERS & SETTERS
+    public Usuario getUsuario() {
+    	return this.usuario;
     }
+
+    
+    // EVENTOS
+    
+	public void onMensajeRecibido(Usuario usuario, String mensaje) {
+		System.out.println("[Mensaje] "+ usuario.getConexion().getIP() + ": " + mensaje);
+	}
+
+	public void onDesconectado(Usuario usuario) {
+		System.out.println("[Desconectado] " + usuario.getConexion().getIP());
+	}
     
 }
