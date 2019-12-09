@@ -6,10 +6,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-import classes.Conexion;
-import classes.EventosConexion;
 import classes.EventosUsuario;
 import classes.Usuario;
+import classes.peticiones.PeticionUserData;
 
 public class Cliente implements EventosUsuario {
 
@@ -51,15 +50,24 @@ public class Cliente implements EventosUsuario {
     public void enviarDatosUsuario() {
     	
     	// Enviar datos del cliente
-    	System.out.println("Nombre de usuario:");
-    	String nombre = scn.nextLine();
+    	String nombre;
     	
-    	if(!nombre.isEmpty())
-    		this.usuario.setNombre(nombre);
+    	do {
+    		
+        	System.out.println("Nombre de usuario (30 caracteres max):");
+    		nombre = scn.nextLine().trim();
+    		
+    	} while (nombre.isEmpty() || nombre.length() > 30);
     	
-    	// Enviar datos del cliente
-		this.usuario.getConexion().send("@INFO name:" + nombre);
+    	this.usuario.setNombre(nombre);
     	
+    	// Crear peticion con la informacion del usuario
+    	PeticionUserData p = new PeticionUserData();
+    	p.setName(nombre);
+    	
+    	// Enviar peticion al servidor para que nos asigne esos datos (para los demas clientes)
+    	this.usuario.getConexion().sendPeticion(p);
+    	   	
     }
     
     // GETTERS & SETTERS

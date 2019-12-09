@@ -61,6 +61,13 @@ public class Backend implements EventosUsuario {
 
 	public void procesarMensaje(Usuario usuario, String mensaje) {
 
+		// Si es una peticio
+		if(mensaje.startsWith("{")) {
+			
+			
+			
+		}
+		
 		// Si empieza con @INFO, es datos sobre el usuario
 		if(mensaje.startsWith("@INFO")) {
 			

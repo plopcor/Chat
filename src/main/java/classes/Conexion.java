@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+import classes.peticiones.Peticion;
+
 public class Conexion implements Runnable {
 
 	private Socket socket;
@@ -80,6 +82,17 @@ public class Conexion implements Runnable {
 		PrintWriter out = new PrintWriter(this.getOutputWriter(), true);
 		out.println(data);
 		out.flush();
+	}
+	
+	public void sendPeticion(Peticion peticion) {
+		
+		if(peticion == null) {
+			System.err.println("Error: La peticion es nula, intento de envio fallido");
+			return;
+		}
+		
+		
+		this.send(peticion.toJSONString());
 	}
 	
 	

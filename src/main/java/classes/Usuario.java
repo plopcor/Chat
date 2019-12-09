@@ -14,9 +14,6 @@ public class Usuario implements EventosConexion {
 		this.conexion = new Conexion(socketCliente);
 		this.conexion.setEventos(this);
 		
-		// Leer informacio que envie el cliente al principio
-
-		
 	}
 
 	// METODOS

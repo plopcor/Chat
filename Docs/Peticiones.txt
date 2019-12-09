@@ -1,0 +1,4 @@
+
+Peticion (Objeto)
+- Permite hacer una peticion al servidor especificando parametros i valores
+- Tiene sub-clases que permiten crear peticiones especificas automaticamente
