@@ -1,0 +1,3 @@
+# Ignorar pruebas
+src/main/java/testing
+target/classes/testing
