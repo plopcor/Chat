@@ -9,14 +9,12 @@ public class PeticionUserData extends Peticion {
 	// CONSTRUCTOR
 	public PeticionUserData() {
 		super();
-		jsonHeader.put("type", "userData");
+		this.headers.put("type", "userData");
 	}
 
 	// METODOS
 	public void setName(String name) {
 		this.addData("name", name.trim());
 	}
-	
-	
 
 }
