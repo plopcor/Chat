@@ -13,8 +13,19 @@ public class PeticionUserData extends Peticion {
 	}
 
 	// METODOS
-	public void setName(String name) {
+	public void setNombre(String name) {
 		this.addData("name", name.trim());
 	}
-
+	
+	public boolean hasNombre() {
+		return (this.getNombre() != null & this.getNombre().length() > 0);
+		//return (this.body.get("name") != null && this.body.get("name").length() > 0);
+	}
+	
+	public String getNombre() {
+		return this.body.get("name");
+	}
+	
+	
+	
 }

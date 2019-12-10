@@ -63,7 +63,7 @@ public class Cliente implements EventosUsuario {
     	
     	// Crear peticion con la informacion del usuario
     	PeticionUserData p = new PeticionUserData();
-    	p.setName(nombre);
+    	p.setNombre(nombre);
     	
     	// Enviar peticion al servidor para que nos asigne esos datos (para los demas clientes)
     	this.usuario.getConexion().sendPeticion(p);

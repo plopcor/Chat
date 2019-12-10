@@ -4,6 +4,7 @@ import java.util.Map;
 
 import classes.Usuario;
 import classes.peticiones.Peticion;
+import classes.peticiones.PeticionUserData;
 
 public class ProcesarPeticiones {
 
@@ -13,7 +14,7 @@ public class ProcesarPeticiones {
 		switch (peticion.getHeaders().get("type").toLowerCase()) {
 
 		case "userdata":
-			procesarUserData(usuario, peticion);
+			procesarUserData(usuario, (PeticionUserData) peticion);
 			break;
 
 		default:
@@ -27,18 +28,31 @@ public class ProcesarPeticiones {
 	// PROCESADORES
 	//
 	
-	private static void procesarUserData(Usuario usuario, Peticion peticion) {
+	private static void procesarUserData(Usuario usuario, PeticionUserData peticion) {
 		
-		for (Map.Entry<String, String> par : peticion.getBody().entrySet()) {
-			
-			// Mirar la informacion que se quiere actualizar del usuario
-			switch(par.getKey().toLowerCase().trim()) {
-			
-				case "name": // Canvio de nombre
-					usuario.setNombre(par.getValue());
-					break;
-			}
-		}
+		// METODO 1
+		
+		// Nombre
+		if(peticion.hasNombre())
+			usuario.setNombre(peticion.getNombre());
+		
+//		if(peticion.hasAlgo())
+//			usuario.setCosa(peticion.getAlgo());
+		
+		
+//		// METODO 2
+//		// - Esta menos parametrizado, podria haber problemas en un futuro al meterle mas cosas y no actualizar los metodos
+//		
+//		for (Map.Entry<String, String> par : peticion.getBody().entrySet()) {
+//			
+//			// Mirar la informacion que se quiere actualizar del usuario
+//			switch(par.getKey().toLowerCase().trim()) {
+//			
+//				case "name": // Canvio de nombre
+//					usuario.setNombre(par.getValue());
+//					break;
+//			}
+//		}
 		
 	}
 	
