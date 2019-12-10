@@ -2,9 +2,11 @@ package server;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import classes.EventosUsuario;
 import classes.Usuario;
+import classes.peticiones.Peticion;
 
 public class Backend implements EventosUsuario {
 
@@ -56,7 +58,7 @@ public class Backend implements EventosUsuario {
 		// Emitir mensaje a todos menos al usuario especificado (el emisor)
 		for(Usuario u : usuarios)
 			if(usuario != u)
-				u.getConexion().send(mensaje);
+				u.getConexion().send("[" + usuario.getNombre() + "]: " + mensaje);
 	}
 
 	public void procesarMensaje(Usuario usuario, String mensaje) {
@@ -64,28 +66,15 @@ public class Backend implements EventosUsuario {
 		// Si es una peticio
 		if(mensaje.startsWith("{")) {
 			
+			// Crear peticion con el mensaje
+			Peticion p = new Peticion();
+			p.fromJSONString(mensaje);
 			
-			
-		}
-		
-		// Si empieza con @INFO, es datos sobre el usuario
-		if(mensaje.startsWith("@INFO")) {
-			
-			// Datos del usuario
-			
-			// Quitar identificador de tipo de mensaje
-			mensaje = mensaje.replace("@INFO", "").trim();
-
-			if(mensaje.contains(":")) {
-				String[] msg = mensaje.split(":");
-				
-				// Ver que informacion se quiere poner
-				switch(msg[0]) {
-					case "name":
-						usuario.setNombre(msg[1]);
-						break;
-				}
-			}
+			// Si la peticion era valida, procesarla
+			if(p != null)
+				procesarPeticion(usuario, p);
+			else
+				return;
 			
 		} else if (mensaje.startsWith("/")) {
 			
@@ -100,6 +89,10 @@ public class Backend implements EventosUsuario {
 		
 	}
 
+	public void procesarPeticion(Usuario usuario, Peticion peticion) {
+		server.modulos.ProcesarPeticiones.procesar(usuario, peticion);
+	}
+	
 	// EVENTOS
 	public void onMensajeRecibido(Usuario usuario, String mensaje) {
 		procesarMensaje(usuario, mensaje);
