@@ -1,18 +1,19 @@
 package classes.peticiones;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class Peticion {
+public class Peticion implements Serializable {
 
 	/*
 	 * Modelo de peticion: Contiene cabezera (metadatos, informacion) i cuerpo (datos)
 	 */
-	
+
+	private static final long serialVersionUID = 1L;
 	protected HashMap<String, String> headers;
 	protected HashMap<String, String> body;
 	
