@@ -6,9 +6,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-import classes.EventosUsuario;
-import classes.Usuario;
-import classes.peticiones.PeticionUserData;
+import classes.peticion.cuerpo.PeticionUserData;
+import classes.usuarios.EventosUsuario;
+import classes.usuarios.Usuario;
 
 public class Cliente implements EventosUsuario {
 
