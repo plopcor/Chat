@@ -2,7 +2,10 @@ package classes.conexion;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -13,8 +16,8 @@ import classes.peticion.Peticion;
 public class Conexion implements Runnable {
 
 	private Socket socket;
-	private InputStreamReader inputReader;
-	private OutputStreamWriter outputWriter;
+	private InputStream inputStream;
+	private OutputStream outputStream;
 	
 	// Threads
 	private Thread readThread;
@@ -27,8 +30,8 @@ public class Conexion implements Runnable {
 		this.socket = socket;
 		
 		try {
-			this.inputReader = new InputStreamReader(socket.getInputStream());
-			this.outputWriter = new OutputStreamWriter(socket.getOutputStream());
+			this.inputStream = socket.getInputStream();
+			this.outputStream = socket.getOutputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -49,7 +52,7 @@ public class Conexion implements Runnable {
     	String data = null;
     	
     	// Cojer input stream de la conexion
-		in = new BufferedReader(this.inputReader);
+		in = new BufferedReader(new InputStreamReader(inputStream));
 
 		do {
 
@@ -92,7 +95,16 @@ public class Conexion implements Runnable {
 		}
 		
 		// ENVIAR PETICION SERIALIZADA
-		
+		try (ObjectOutputStream objOutStream = new ObjectOutputStream(this.getOutputStream());) {
+			
+			objOutStream.writeObject(peticion);
+			
+			System.out.println();
+			
+		} catch (IOException e) {
+			System.err.println("Error al enviar peticion (Escriptura de objeto)");
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -101,12 +113,12 @@ public class Conexion implements Runnable {
 		return this.socket;
 	}
 	
-	public InputStreamReader getInputReader() {
-		return this.inputReader;
+	public InputStream getInputStream() {
+		return this.inputStream;
 	}
 	
-	public OutputStreamWriter getOutputWriter() {
-		return this.outputWriter;
+	public OutputStream getOutputStream() {
+		return this.outputStream;
 	}
 	
 	public String getIP() {
