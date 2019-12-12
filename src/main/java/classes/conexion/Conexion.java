@@ -81,9 +81,9 @@ public class Conexion implements Runnable {
 		} while (data != null);
 	}
 	
-	public void send(String data) {
-		PrintWriter out = new PrintWriter(this.getOutputWriter(), true);
-		out.println(data);
+	public void sendString(String data) {
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(this.getOutputStream()), true);
+		out.println(data.trim());
 		out.flush();
 	}
 	

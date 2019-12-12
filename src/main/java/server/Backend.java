@@ -51,14 +51,14 @@ public class Backend implements EventosUsuario {
 	public void emitirMensaje(String mensaje) {
 		// Enviar mensaje a todos los usarios
 		for(Usuario u : usuarios)
-			u.getConexion().send(mensaje);
+			u.getConexion().sendString(mensaje);
 	}
 	
 	public void emitirMensajeRecibido(Usuario usuario, String mensaje) {
 		// Emitir mensaje a todos menos al usuario especificado (el emisor)
 		for(Usuario u : usuarios)
 			if(usuario != u)
-				u.getConexion().send("[" + usuario.getNombre() + "]: " + mensaje);
+				u.getConexion().sendString("[" + usuario.getNombre() + "]: " + mensaje);
 	}
 
 	public void procesarMensaje(Usuario usuario, String mensaje) {

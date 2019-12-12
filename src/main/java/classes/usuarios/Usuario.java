@@ -25,7 +25,7 @@ public class Usuario implements EventosConexion {
 	}
 
 	public void enviarMensaje(String data) {
-		this.conexion.send(data);
+		this.conexion.sendString(data);
 	}
 	
 	// GETTERS & SETTERS
