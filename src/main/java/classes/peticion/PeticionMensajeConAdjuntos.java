@@ -13,4 +13,11 @@ public class PeticionMensajeConAdjuntos extends Peticion {
 		this.body = new BodyMensajeConAdjuntos();
 	}
 	
+	// GETTERS & SETTERS
+
+	@Override
+	public BodyMensajeConAdjuntos getBody() {
+		return (BodyMensajeConAdjuntos) this.body;
+	}
+	
 }

@@ -48,6 +48,12 @@ public class Conexion implements Runnable {
 	
 	public void run() {
 		
+		// Leer objetos
+		
+		
+		
+		
+		///////////////////////77
 		BufferedReader in = null;
     	String data = null;
     	
@@ -99,7 +105,7 @@ public class Conexion implements Runnable {
 			
 			objOutStream.writeObject(peticion);
 			
-			System.out.println();
+			System.out.println("[Correcto] Peticion enviada");
 			
 		} catch (IOException e) {
 			System.err.println("Error al enviar peticion (Escriptura de objeto)");
