@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import classes.EventosUsuario;
-import classes.Usuario;
-import classes.peticiones.Peticion;
+import classes.peticion.Peticion;
+import classes.usuarios.EventosUsuario;
+import classes.usuarios.Usuario;
 
 public class Backend implements EventosUsuario {
 

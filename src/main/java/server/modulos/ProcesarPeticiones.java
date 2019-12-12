@@ -2,9 +2,9 @@ package server.modulos;
 
 import java.util.Map;
 
-import classes.Usuario;
-import classes.peticiones.Peticion;
-import classes.peticiones.PeticionUserData;
+import classes.peticion.Peticion;
+import classes.peticion.cuerpo.PeticionUserData;
+import classes.usuarios.Usuario;
 
 public class ProcesarPeticiones {
 

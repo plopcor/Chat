@@ -1,6 +1,9 @@
-package classes;
+package classes.usuarios;
 
 import java.net.Socket;
+
+import classes.conexion.Conexion;
+import classes.conexion.EventosConexion;
 
 public class Usuario implements EventosConexion {
 
