@@ -13,6 +13,11 @@ public class PeticionMensaje extends Peticion {
 		this.body = new BodyMensaje();
 	}
 	
+	public PeticionMensaje(String mensaje) {
+		super();
+		this.body = new BodyMensaje(mensaje);
+	}
+	
 	
 	// GETTERS & SETTERS
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -49,8 +50,43 @@ public class Conexion implements Runnable {
 	public void run() {
 		
 		// Leer objetos
+		ObjectInputStream objInputStream;
 		
+		try {
+			objInputStream = new ObjectInputStream(this.inputStream);
+		} catch (IOException e) {
+			System.err.println("Error al abrir el input stream para objetos");
+			e.printStackTrace();
+			return;
+		}
 		
+		Object objRecibido;
+
+		try {
+
+			objRecibido = objInputStream.readObject();
+			
+			// Accionar evento
+			if(eventos != null)
+				this.eventos.onMensajeEnviado(objRecibido);
+			
+		} catch (ClassNotFoundException e) {
+			System.err.println("Error al leer objeto serializado, clase desconocida");
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			System.err.println("Error al leer objeto serializado");
+			e.printStackTrace();
+		}
+
+			
+			
+			
+//			if(obj instanceof Peticion) {
+//				procesarPeticion((Peticion) obj);
+//			}
+			
+
 		
 		
 		///////////////////////77

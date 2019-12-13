@@ -2,9 +2,10 @@ package server;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import classes.peticion.Peticion;
+import classes.peticion.PeticionDatosUsuario;
+import classes.peticion.PeticionMensaje;
 import classes.usuarios.EventosUsuario;
 import classes.usuarios.Usuario;
 
@@ -24,10 +25,12 @@ public class Backend implements EventosUsuario {
     	return backend;
     }
     
-    public void conectarUsuario(Usuario usuario) throws IOException {
+    // METODOS
+    
+    public void conectarUsuario(Usuario usuario) throws NullPointerException {
     	
     	if(usuario == null)
-    		throw new IOException("El cliente esta vacio");
+    		throw new NullPointerException ("El cliente esta vacio");
     	
     	// Si el usuario se conecta correctamente
     	System.out.println("Cliente conectado: " + usuario.getConexion().getIP());
@@ -43,50 +46,42 @@ public class Backend implements EventosUsuario {
     }
     
     public void desconectarUsuario(Usuario usuario) {
+    	System.out.println("@ " + usuario.getNombre() + " se ha desconectado.");
     	if (usuarios.remove(usuario))
-    		emitirMensaje(usuario.getConexion().getIP() + " desconectado");
+    		emitirPeticion(new PeticionMensaje(usuario.getConexion().getIP() + " desconectado"));
     }
+    
+    
+    // PETICIONES
+    
+	public void emitirPeticion(Peticion peticion) {
 
-	
-	public void emitirMensaje(String mensaje) {
-		// Enviar mensaje a todos los usarios
+		if(peticion == null)
+			return;
+		
+		// Enviar peticion a todos los usarios
 		for(Usuario u : usuarios)
-			u.getConexion().sendString(mensaje);
+			u.getConexion().sendPeticion(peticion);
+
 	}
 	
-	public void emitirMensajeRecibido(Usuario usuario, String mensaje) {
-		// Emitir mensaje a todos menos al usuario especificado (el emisor)
+	public void emitirPeticionRecibida(Usuario usuario, Peticion peticion) {
+		
+		// Emitir peticion a todos menos al usuario especificado (el emisor)
 		for(Usuario u : usuarios)
 			if(usuario != u)
-				u.getConexion().sendString("[" + usuario.getNombre() + "]: " + mensaje);
+				u.getConexion().sendPeticion(peticion);
+				//u.getConexion().sendString("[" + usuario.getNombre() + "]: " + mensaje);		
 	}
+	
+	public void procesar(Usuario usuario, Object objRecibido) {
 
-	public void procesarMensaje(Usuario usuario, String mensaje) {
+		// Ver tipo de objeto
+		if(objRecibido instanceof Peticion)
+				procesarPeticion(usuario, (Peticion) objRecibido);
 
-		// Si es una peticio
-		if(mensaje.startsWith("{")) {
-			
-			// Crear peticion con el mensaje
-			Peticion p = new Peticion();
-			p.fromJSONString(mensaje);
-			
-			// Si la peticion era valida, procesarla
-			if(p != null)
-				procesarPeticion(usuario, p);
-			else
-				return;
-			
-		} else if (mensaje.startsWith("/")) {
-			
-			// Comandos
-			
-		} else {
-			
-			// Mensaje normal
-			System.out.println("[" + usuario.getConexion().getIP() + "] (" + usuario.getNombre() + "): " + mensaje);
-			emitirMensajeRecibido(usuario, mensaje);
-		}
-		
+		else
+			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
 	}
 
 	public void procesarPeticion(Usuario usuario, Peticion peticion) {
@@ -94,12 +89,12 @@ public class Backend implements EventosUsuario {
 	}
 	
 	// EVENTOS
-	public void onMensajeRecibido(Usuario usuario, String mensaje) {
-		procesarMensaje(usuario, mensaje);
+	public void onObjetoRecibido(Usuario usuario, Object objRecibido) {
+		System.out.println("@ Objeto recibido de " + usuario.getNombre());
+		procesar(usuario, objRecibido);
 	}
 	
 	public void onDesconectado(Usuario usuario) {
-		System.out.println("" + usuario.getConexion().getIP() + " desconectado");
 		desconectarUsuario(usuario);
 	}
 	

@@ -1,20 +1,23 @@
-package classes.peticion.bodies;
+package classes.peticion;
 
-public class BodyMensaje extends Body {
+public class PeticionMensaje_v2 extends Peticion {
+
+	private static final long serialVersionUID = 1L;
 
 	String mensaje;
-
 	
 	// CONSTRUCTOR
 	
-	public BodyMensaje() {
+	public PeticionMensaje_v2() {
 		super();
 	}
-
-	public BodyMensaje(String mensaje) {
+	
+	public PeticionMensaje_v2(String mensaje) {
+		super();
 		this.mensaje = mensaje;
 	}
 	
+
 	// GETTERS & SETTERS
 	
 	public String getMensaje() {
@@ -28,4 +31,5 @@ public class BodyMensaje extends Body {
 	public boolean hasMensaje() {
 		return this.mensaje.length() > 0;
 	}
+	
 }

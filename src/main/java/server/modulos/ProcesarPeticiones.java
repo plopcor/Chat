@@ -3,23 +3,29 @@ package server.modulos;
 import java.util.Map;
 
 import classes.peticion.Peticion;
-import classes.peticion.cuerpo.PeticionUserData;
+import classes.peticion.PeticionDatosUsuario;
+import classes.peticion.bodies.BodyMensaje;
+import classes.peticion.*;
 import classes.usuarios.Usuario;
 
 public class ProcesarPeticiones {
 
 	public static void procesar(Usuario usuario, Peticion peticion) {
 
-		// Ver tipo de peticion (header => type)
-		switch (peticion.getHeaders().get("type").toLowerCase()) {
-
-		case "userdata":
-			procesarUserData(usuario, (PeticionUserData) peticion);
-			break;
-
-		default:
+		
+		if(peticion instanceof PeticionDatosUsuario)
+			System.out.println("RECIBIDO => Datos de usuario");
+			//procesarPeticionDatos(usuario, (PeticionDatosUsuario) objRecibido);
+		
+		else if (peticion instanceof PeticionMensaje)
+			procesarPeticionMensaje(usuario, (PeticionMensaje) peticion);
+		
+		else if (peticion instanceof PeticionNotificacion)
+			procesarPeticionNotificacion(usuario, (PeticionNotificacion) peticion);
+		
+		else {
 			System.err.println("No se ha podido procesar la peticion");
-			System.err.println("Tipo de peticion desconocido => \""+ peticion.getHeaders().get("type") + "\"");
+			System.err.println("Tipo de peticion desconocido => \""+ peticion.getClass().getSimpleName() + "\"");
 		}
 	}
 	
@@ -27,6 +33,21 @@ public class ProcesarPeticiones {
 	//
 	// PROCESADORES
 	//
+	
+	private static void procesarPeticionDatos(Usuario usuario, PeticionDatosUsuario p) {
+		
+		if(p == null)
+			return;
+		
+		BodyMensaje bdMsg = p.getBody();
+		
+		if(bdMsg.hasMensaje()) {
+			
+		}
+		
+		
+	} 
+	
 	
 	private static void procesarUserData(Usuario usuario, PeticionUserData peticion) {
 		

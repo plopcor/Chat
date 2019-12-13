@@ -1,12 +1,12 @@
 package client;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-import classes.peticion.cuerpo.PeticionUserData;
+import classes.peticion.PeticionDatosUsuario;
+import classes.peticion.PeticionMensaje;
 import classes.usuarios.EventosUsuario;
 import classes.usuarios.Usuario;
 
@@ -34,15 +34,21 @@ public class Cliente implements EventosUsuario {
     	this.usuario.start();
     	
     	String input;
-    	PrintWriter out = new PrintWriter(this.getUsuario().getConexion().getOutputWriter(), true);
+    	PeticionMensaje petMsg;
 
 		// Enviar datos
         while (true) {
 
         	input = scn.nextLine();
-            
-        	out.println(input);
-	        out.flush();
+        	
+        	// Crear PeticioMensaje con el mensaje
+        	if(!input.isEmpty()) {
+        		petMsg = new PeticionMensaje();
+        		petMsg.getBody().setMensaje(input);
+        	
+        		// Enviar
+        		this.getUsuario().getConexion().sendPeticion(petMsg);
+        	}
         }
     	
     }
@@ -62,11 +68,11 @@ public class Cliente implements EventosUsuario {
     	this.usuario.setNombre(nombre);
     	
     	// Crear peticion con la informacion del usuario
-    	PeticionUserData p = new PeticionUserData();
-    	p.setNombre(nombre);
+    	PeticionDatosUsuario pDatos = new PeticionDatosUsuario();
+    	pDatos.getBody().setNombre(nombre);
     	
     	// Enviar peticion al servidor para que nos asigne esos datos (para los demas clientes)
-    	this.usuario.getConexion().sendPeticion(p);
+    	this.usuario.getConexion().sendPeticion(pDatos);
     	   	
     }
     
@@ -78,8 +84,10 @@ public class Cliente implements EventosUsuario {
     
     // EVENTOS
     
-	public void onMensajeRecibido(Usuario usuario, String mensaje) {
-		System.out.println("[Mensaje] "+ usuario.getConexion().getIP() + ": " + mensaje);
+	public void onMensajeRecibido(Usuario usuario, Object objRecibido) {
+		System.out.println("Objeto recibido");
+		
+//		System.out.println("[Mensaje] "+ usuario.getConexion().getIP() + ": " + mensaje);
 	}
 
 	public void onDesconectado(Usuario usuario) {
