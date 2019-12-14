@@ -2,6 +2,7 @@ package server;
 
 import java.util.ArrayList;
 
+import classes.notificacion.Notificacion;
 import classes.peticion.Peticion;
 import classes.peticion.PeticionMensaje;
 import classes.usuario.EventosUsuario;
@@ -35,6 +36,7 @@ public class Backend implements EventosUsuario {
     	System.out.println("Cliente conectado: " + usuario.getConexion().getIP());
 		
     	// Informar de la conexion a los demas clientes
+    	// @@@ HA DE ENVIAR UNA "NotificacionConexion" NO UNA "PeticionMensaje" 
     	emitirPeticion(new PeticionMensaje("Usuario conectado"));
     	
     	// Cojer eventos
@@ -78,6 +80,18 @@ public class Backend implements EventosUsuario {
 			if(usuario != u)
 				u.getConexion().sendPeticion(peticion);	
 	}
+	
+	// NOTIFICACIONES
+	public void emitirNotificacion(Notificacion notificacion) {
+
+		if(notificacion == null)
+			return;
+		
+		for(Usuario u : usuarios)
+			u.getConexion().sendNotificacion(notificacion);
+		
+	}
+	
 	
 	public void procesar(Usuario usuario, Object objRecibido) {
 
