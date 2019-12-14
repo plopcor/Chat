@@ -11,6 +11,7 @@ public class Backend implements EventosUsuario {
 
 	public static Backend backend;
     private ArrayList<Usuario> usuarios;
+    private static boolean debugMode = false;
 	
     // CONSTRUCTOR
     private Backend() {
@@ -49,6 +50,10 @@ public class Backend implements EventosUsuario {
     		emitirPeticion(new PeticionMensaje(usuario.getConexion().getIP() + " desconectado"));
     }
     
+    public static void log(String texto) {
+		if(debugMode)
+			System.out.println(texto);
+	}
     
     // PETICIONES
     

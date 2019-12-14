@@ -55,22 +55,10 @@ public class Conexion implements Runnable {
 	
 	public void run() {
 		
-//		// Crear stream de objetos
-//		ObjectInputStream objInputStream;
-//		
-//		try {
-//			objInputStream = new ObjectInputStream(this.inputStream);
-//		} catch (IOException e) {
-//			System.err.println("Error al abrir el input stream para objetos");
-//			e.printStackTrace();
-//			return;
-//		}
-		
-		// Leer objetos
-		
 		Object objRecibido;
 		boolean salir = false;
 		
+		// Leer objetos
 		do {
 		
 			try {
@@ -124,12 +112,10 @@ public class Conexion implements Runnable {
 		// ENVIAR PETICION SERIALIZADA
 		try {
 			
-//			ObjectOutputStream objOutStream = new ObjectOutputStream(this.getOutputStream());
-			
 			objOutStream.writeObject(peticion);
 			objOutStream.flush();
 			
-			System.out.println("[Correcto] Peticion enviada");
+//			System.out.println("[Correcto] Peticion enviada");
 			
 		} catch (IOException e) {
 			System.err.println("Error al enviar peticion (Escriptura de objeto)");

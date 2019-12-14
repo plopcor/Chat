@@ -9,7 +9,7 @@ public class ProcesarPeticiones {
 
 	public static void procesar(Usuario usuario, Peticion peticion) {
 
-		System.out.println("@ Recibido peticion de \"" + usuario.getPerfil().getNombre() + "\"");
+		Backend.log("@ Recibido peticion de \"" + usuario.getPerfil().getNombre() + "\"");
 		
 		if(peticion instanceof PeticionDatosUsuario)
 			procesarPeticionDatos(usuario, (PeticionDatosUsuario) peticion);
@@ -34,7 +34,7 @@ public class ProcesarPeticiones {
 	private static void procesarPeticionDatos(Usuario usuario, PeticionDatosUsuario p) {
 		
 		// DEBUG
-		System.out.println("# RECIBIDO => Datos de usuario");
+		Backend.log("# RECIBIDO => Datos de usuario");
 		
 		if(!p.hasPerfil())
 			return;		
@@ -51,19 +51,19 @@ public class ProcesarPeticiones {
 	private static void procesarPeticionMensaje(Usuario usuario, PeticionMensaje p) {
 		
 		// DEBUG
-		System.out.println("# RECIBIDO => Mensaje");
+		Backend.log("# RECIBIDO => Mensaje");
 		
 		if(p.getMensaje().length() == 0)
 			return;
 
 		// Poner emisor del mensaje (para retransmitirlo a los demas clientes)
 		p.getHeader().setPerfilEmisor(usuario.getPerfil());
-		
-		System.out.println("@ Mensaje procesado: " + p.getMensaje());
-		System.out.println("@ Reenviando mensaje");
+
+		System.out.println("[" + usuario.getPerfil().getNombre() + "]: " + p.getMensaje() );
+		Backend.log("@ Reenviando mensaje");
 		
 		// Re-enviar mensaje a todos los demas usuarios
-		Backend.getInstance().emitirPeticion(p);	
+		Backend.getInstance().emitirPeticionRecibida(usuario, p);	
 
 		// Trigger evento de onUsuarioMensajeRecibido???
 	}
@@ -71,7 +71,7 @@ public class ProcesarPeticiones {
 	private static void procesarPeticionNotificacion(Usuario usuario, PeticionNotificacion p) {
 		
 		// DEBUG
-		System.out.println("# RECIBIDO => Notificacion");
+		Backend.log("# RECIBIDO => Notificacion");
 		
 	}
 

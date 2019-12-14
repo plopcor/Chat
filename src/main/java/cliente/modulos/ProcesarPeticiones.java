@@ -1,7 +1,7 @@
 package cliente.modulos;
 
 import classes.usuario.Usuario;
-import server.Backend;
+import cliente.Cliente;
 import classes.Perfil;
 import classes.peticion.*;
 
@@ -9,7 +9,7 @@ public class ProcesarPeticiones {
 
 	public static void procesar(Usuario usuario, Peticion peticion) {
 
-		System.out.println("@ Recibido peticion de \"" + usuario.getPerfil().getNombre() + "\"");
+		Cliente.log("@ Recibido peticion de \"" + usuario.getPerfil().getNombre() + "\"");
 		
 		if(peticion instanceof PeticionDatosUsuario)
 			procesarPeticionDatos(usuario, (PeticionDatosUsuario) peticion);
@@ -33,13 +33,13 @@ public class ProcesarPeticiones {
 	
 	private static void procesarPeticionDatos(Usuario usuario, PeticionDatosUsuario p) {
 		// DEBUG
-		System.out.println("# RECIBIDO => Datos de usuario");
+		Cliente.log("# RECIBIDO => Datos de usuario");
 	} 
 	
 	private static void procesarPeticionMensaje(Usuario usuario, PeticionMensaje p) {
 		
 		// DEBUG
-		System.out.println("# RECIBIDO => Mensaje");
+		Cliente.log("# RECIBIDO => Mensaje");
 		
 		if(p.getMensaje().length() == 0)
 			return;
@@ -51,7 +51,7 @@ public class ProcesarPeticiones {
 		String mensaje = "";
 		
 		if(emisor != null)
-			mensaje += "[" + "]: ";
+			mensaje += "[" + emisor.getNombre() + "]: ";
 		else
 			mensaje += "[DESCONOCIDO]: ";
 
@@ -64,7 +64,7 @@ public class ProcesarPeticiones {
 	private static void procesarPeticionNotificacion(Usuario usuario, PeticionNotificacion p) {
 		
 		// DEBUG
-		System.out.println("# RECIBIDO => Notificacion");
+		Cliente.log("# RECIBIDO => Notificacion");
 		
 	}
 

@@ -16,6 +16,7 @@ public class Cliente implements EventosUsuario {
 
 	private Usuario usuario;
     private Scanner scn;
+    private static boolean debugMode = false;
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         try {
@@ -75,7 +76,6 @@ public class Cliente implements EventosUsuario {
     	
     	// Enviar peticion al servidor para que nos asigne esos datos (para los demas clientes)
     	this.usuario.getConexion().sendPeticion(pDatos);
-    	this.usuario.getConexion().sendPeticion(pDatos); // TEST
     	   	
     }
     
@@ -107,7 +107,17 @@ public class Cliente implements EventosUsuario {
 		procesar(usuario, objRecibido);
 		
 	}
+
+	@Override
+	public void onUsuarioDesconectado(Usuario usuario) {
+		System.out.println("Te has desconectado");
+	}
     
+	public static void log(String texto) {
+		if(debugMode)
+			System.out.println(texto);
+	}
+	
 //	public void onMensajeRecibido(Usuario usuario, Object objRecibido) {
 //		System.out.println("Objeto recibido");
 //		
