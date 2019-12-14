@@ -74,27 +74,27 @@ public class Backend implements EventosUsuario {
 	
 	public void procesar(Usuario usuario, Object objRecibido) {
 
+		if(objRecibido == null)
+			return;
+		
 		// Ver tipo de objeto
 		if(objRecibido instanceof Peticion)
-			server.modulos.ProcesarPeticiones.procesa();
-			//procesarPeticion(usuario, (Peticion) objRecibido);
+			server.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
 
 		else
 			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
-	}
-
-	public void procesarPeticion(Usuario usuario, Peticion peticion) {
-//		server.modulos.ProcesarPeticiones.procesar(usuario, peticion);
 	}
 	
 	// EVENTOS
 	public void onUsuarioObjetoRecibido(Usuario usuario, Object objRecibido) {
 		System.out.println("@ Objeto recibido de " + usuario.getPerfil().getNombre() + " => " + objRecibido.getClass().getSimpleName());
-		//procesar(usuario, objRecibido);
+		procesar(usuario, objRecibido);
 	}
 	
-	public void onDesconectado(Usuario usuario) {
+	public void onUsuarioDesconectado(Usuario usuario) {
 		desconectarUsuario(usuario);
 	}
+	
+	// ON EVENTOS
 	
 }

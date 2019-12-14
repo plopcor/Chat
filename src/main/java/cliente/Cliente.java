@@ -1,4 +1,4 @@
-package client;
+package cliente;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import classes.Perfil;
+import classes.peticion.Peticion;
 import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
 import classes.usuario.EventosUsuario;
@@ -74,8 +75,22 @@ public class Cliente implements EventosUsuario {
     	
     	// Enviar peticion al servidor para que nos asigne esos datos (para los demas clientes)
     	this.usuario.getConexion().sendPeticion(pDatos);
+    	this.usuario.getConexion().sendPeticion(pDatos); // TEST
     	   	
     }
+    
+    public void procesar(Usuario usuario, Object objRecibido) {
+
+		if(objRecibido == null)
+			return;
+		
+		// Ver tipo de objeto
+		if(objRecibido instanceof Peticion)
+			cliente.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
+
+		else
+			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
+	}
     
     // GETTERS & SETTERS
     public Usuario getUsuario() {
@@ -86,8 +101,11 @@ public class Cliente implements EventosUsuario {
     // EVENTOS
 
 	@Override
-	public void onUsuarioRecibidoObjeto(Usuario usuario, Object objRecibido) {
+	public void onUsuarioObjetoRecibido(Usuario usuario, Object objRecibido) {
+		
 		System.out.println("Objeto recibido");
+		procesar(usuario, objRecibido);
+		
 	}
     
 //	public void onMensajeRecibido(Usuario usuario, Object objRecibido) {

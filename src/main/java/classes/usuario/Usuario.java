@@ -63,14 +63,9 @@ public class Usuario implements EventosConexion {
 			this.eventos.onUsuarioObjetoRecibido(this, objRecibido);
 	}
 	
-//	public void onMensajeEnviado(String mensaje) {
-//		if(eventos != null)
-//			this.eventos.onMensajeRecibido(this, mensaje);
-//	}
-//
-//	public void onDesconectado() {
-//		if(eventos != null)
-//			this.eventos.onDesconectado(this);
-//	}
+	public void onDesconectado() {
+		if(eventos != null)
+			this.eventos.onUsuarioDesconectado(this);
+	}
 	
 }

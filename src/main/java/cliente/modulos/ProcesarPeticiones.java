@@ -1,4 +1,4 @@
-package server.modulos;
+package cliente.modulos;
 
 import classes.usuario.Usuario;
 import server.Backend;
@@ -32,20 +32,8 @@ public class ProcesarPeticiones {
 	//
 	
 	private static void procesarPeticionDatos(Usuario usuario, PeticionDatosUsuario p) {
-		
 		// DEBUG
 		System.out.println("# RECIBIDO => Datos de usuario");
-		
-		if(!p.hasPerfil())
-			return;		
-		
-		// Modificar perfil del usuario con los datos recibidos
-		Perfil perfilDatos = p.getPerfil();
-		Perfil perfilUsuario = usuario.getPerfil();
-		
-		// Cambiar nombre
-		if(perfilDatos.getNombre().length() > 0)
-			perfilUsuario.setNombre(perfilDatos.getNombre());
 	} 
 	
 	private static void procesarPeticionMensaje(Usuario usuario, PeticionMensaje p) {
@@ -55,17 +43,22 @@ public class ProcesarPeticiones {
 		
 		if(p.getMensaje().length() == 0)
 			return;
-
-		// Poner emisor del mensaje (para retransmitirlo a los demas clientes)
-		p.getHeader().setPerfilEmisor(usuario.getPerfil());
 		
-		System.out.println("@ Mensaje procesado: " + p.getMensaje());
-		System.out.println("@ Reenviando mensaje");
+		// Ver emisor del mensaje 
+		Perfil emisor = p.getHeader().getPerfilEmisor();
 		
-		// Re-enviar mensaje a todos los demas usuarios
-		Backend.getInstance().emitirPeticion(p);	
+		// Construir mensaje para mostrarlo
+		String mensaje = "";
+		
+		if(emisor != null)
+			mensaje += "[" + "]: ";
+		else
+			mensaje += "[DESCONOCIDO]: ";
 
-		// Trigger evento de onUsuarioMensajeRecibido???
+		mensaje += p.getMensaje();
+
+		System.out.println(mensaje);
+		
 	}
 	
 	private static void procesarPeticionNotificacion(Usuario usuario, PeticionNotificacion p) {
