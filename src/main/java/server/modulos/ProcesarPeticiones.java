@@ -1,33 +1,29 @@
 package server.modulos;
 
-import java.util.Map;
-
-import classes.peticion.Peticion;
-import classes.peticion.PeticionDatosUsuario;
-import classes.peticion.bodies.BodyMensaje;
+import classes.usuario.Usuario;
+import classes.Perfil;
 import classes.peticion.*;
-import classes.usuarios.Usuario;
 
 public class ProcesarPeticiones {
 
-	public static void procesar(Usuario usuario, Peticion peticion) {
-
-		
-		if(peticion instanceof PeticionDatosUsuario)
-			System.out.println("RECIBIDO => Datos de usuario");
-			//procesarPeticionDatos(usuario, (PeticionDatosUsuario) objRecibido);
-		
-		else if (peticion instanceof PeticionMensaje)
-			procesarPeticionMensaje(usuario, (PeticionMensaje) peticion);
-		
-		else if (peticion instanceof PeticionNotificacion)
-			procesarPeticionNotificacion(usuario, (PeticionNotificacion) peticion);
-		
-		else {
-			System.err.println("No se ha podido procesar la peticion");
-			System.err.println("Tipo de peticion desconocido => \""+ peticion.getClass().getSimpleName() + "\"");
-		}
-	}
+//	public static void procesar(Usuario usuario, Peticion peticion) {
+//
+//		
+//		if(peticion instanceof PeticionDatosUsuario)
+//			System.out.println("RECIBIDO => Datos de usuario");
+//			//procesarPeticionDatos(usuario, (PeticionDatosUsuario) objRecibido);
+//		
+//		else if (peticion instanceof PeticionMensaje)
+//			procesarPeticionMensaje(usuario, (PeticionMensaje) peticion);
+//		
+//		else if (peticion instanceof PeticionNotificacion)
+//			procesarPeticionNotificacion(usuario, (PeticionNotificacion) peticion);
+//		
+//		else {
+//			System.err.println("No se ha podido procesar la peticion");
+//			System.err.println("Tipo de peticion desconocido => \""+ peticion.getClass().getSimpleName() + "\"");
+//		}
+//	}
 	
 	
 	//
@@ -39,23 +35,28 @@ public class ProcesarPeticiones {
 		if(p == null)
 			return;
 		
-		BodyMensaje bdMsg = p.getBody();
-		
-		if(bdMsg.hasMensaje()) {
-			
-		}
+//		BodyMensaje bdMsg = p.getBody();
+//		
+//		if(bdMsg.hasMensaje()) {
+//			
+//		}
 		
 		
 	} 
 	
 	
-	private static void procesarUserData(Usuario usuario, PeticionUserData peticion) {
+	private static void procesarUserData(Usuario usuario, PeticionDatosUsuario peticion) {
 		
 		// METODO 1
 		
+		if(!peticion.hasPerfil())
+			return;
+		
+		Perfil perfil = peticion.getPerfil();
+		
 		// Nombre
-		if(peticion.hasNombre())
-			usuario.setNombre(peticion.getNombre());
+		if(perfil.getNombre().length() > 0)
+			usuario.getPerfil().setNombre(perfil.getNombre());
 		
 //		if(peticion.hasAlgo())
 //			usuario.setCosa(peticion.getAlgo());

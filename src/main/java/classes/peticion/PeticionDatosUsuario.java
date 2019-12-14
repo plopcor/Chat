@@ -1,24 +1,36 @@
 package classes.peticion;
 
-import classes.peticion.bodies.BodyDatosUsuario;
+import classes.Perfil;
 
 public class PeticionDatosUsuario extends Peticion {
 
 	private static final long serialVersionUID = 1L;
-
-
+	
+	Perfil perfil;
+	
 	// CONSTRUCTOR
 	public PeticionDatosUsuario() {
 		super();
-		this.body = new BodyDatosUsuario();
+	}
+	
+	public PeticionDatosUsuario(Perfil perfil) {
+		this();
+		this.perfil = perfil;
 	}
 	
 	
 	// GETTERS & SETTERS
+	
+	public Perfil getPerfil() {
+		return perfil;
+	}
 
-	@Override
-	public BodyDatosUsuario getBody() {
-		return (BodyDatosUsuario) this.body;
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 	
+	public boolean hasPerfil() {
+		return this.perfil != null;
+	}
+
 }

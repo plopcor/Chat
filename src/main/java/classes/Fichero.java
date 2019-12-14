@@ -1,11 +1,13 @@
-package classes.peticion.clases;
+package classes;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 
-public class Fichero {
+public class Fichero implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	File fichero;
 	byte[] bytesFichero;
 	

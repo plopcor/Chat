@@ -5,10 +5,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+import classes.Perfil;
 import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
-import classes.usuarios.EventosUsuario;
-import classes.usuarios.Usuario;
+import classes.usuario.EventosUsuario;
+import classes.usuario.Usuario;
 
 public class Cliente implements EventosUsuario {
 
@@ -30,21 +31,21 @@ public class Cliente implements EventosUsuario {
     }
     
     public void start() {
-    	// Empezar lectura
+    	
+    	// Empezar lectura para datos recibidos
     	this.usuario.start();
     	
     	String input;
     	PeticionMensaje petMsg;
 
-		// Enviar datos
+		// Empezar lectura para enviar datos
         while (true) {
 
-        	input = scn.nextLine();
+        	input = scn.nextLine().trim();
         	
         	// Crear PeticioMensaje con el mensaje
         	if(!input.isEmpty()) {
-        		petMsg = new PeticionMensaje();
-        		petMsg.getBody().setMensaje(input);
+        		petMsg = new PeticionMensaje(input);
         	
         		// Enviar
         		this.getUsuario().getConexion().sendPeticion(petMsg);
@@ -65,11 +66,11 @@ public class Cliente implements EventosUsuario {
     		
     	} while (nombre.isEmpty() || nombre.length() > 30);
     	
-    	this.usuario.setNombre(nombre);
+    	// Crear perfil del usuario
+    	this.usuario.setPerfil(new Perfil(nombre));
     	
     	// Crear peticion con la informacion del usuario
-    	PeticionDatosUsuario pDatos = new PeticionDatosUsuario();
-    	pDatos.getBody().setNombre(nombre);
+    	PeticionDatosUsuario pDatos = new PeticionDatosUsuario(this.usuario.getPerfil());
     	
     	// Enviar peticion al servidor para que nos asigne esos datos (para los demas clientes)
     	this.usuario.getConexion().sendPeticion(pDatos);
@@ -83,15 +84,20 @@ public class Cliente implements EventosUsuario {
 
     
     // EVENTOS
-    
-	public void onMensajeRecibido(Usuario usuario, Object objRecibido) {
-		System.out.println("Objeto recibido");
-		
-//		System.out.println("[Mensaje] "+ usuario.getConexion().getIP() + ": " + mensaje);
-	}
 
-	public void onDesconectado(Usuario usuario) {
-		System.out.println("[Desconectado] " + usuario.getConexion().getIP());
+	@Override
+	public void onUsuarioRecibidoObjeto(Usuario usuario, Object objRecibido) {
+		System.out.println("Objeto recibido");
 	}
+    
+//	public void onMensajeRecibido(Usuario usuario, Object objRecibido) {
+//		System.out.println("Objeto recibido");
+//		
+////		System.out.println("[Mensaje] "+ usuario.getConexion().getIP() + ": " + mensaje);
+//	}
+
+//	public void onDesconectado(Usuario usuario) {
+//		System.out.println("[Desconectado] " + usuario.getConexion().getIP());
+//	}
     
 }

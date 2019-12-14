@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import classes.usuarios.Usuario;
+import classes.usuario.Usuario;
 
 public class Servidor {
 	

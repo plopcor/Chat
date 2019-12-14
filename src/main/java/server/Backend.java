@@ -1,13 +1,11 @@
 package server;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import classes.peticion.Peticion;
-import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
-import classes.usuarios.EventosUsuario;
-import classes.usuarios.Usuario;
+import classes.usuario.EventosUsuario;
+import classes.usuario.Usuario;
 
 public class Backend implements EventosUsuario {
 
@@ -46,7 +44,7 @@ public class Backend implements EventosUsuario {
     }
     
     public void desconectarUsuario(Usuario usuario) {
-    	System.out.println("@ " + usuario.getNombre() + " se ha desconectado.");
+    	System.out.println("@ " + usuario.getPerfil().getNombre() + " se ha desconectado.");
     	if (usuarios.remove(usuario))
     		emitirPeticion(new PeticionMensaje(usuario.getConexion().getIP() + " desconectado"));
     }
@@ -78,20 +76,21 @@ public class Backend implements EventosUsuario {
 
 		// Ver tipo de objeto
 		if(objRecibido instanceof Peticion)
-				procesarPeticion(usuario, (Peticion) objRecibido);
+			server.modulos.ProcesarPeticiones.procesa();
+			//procesarPeticion(usuario, (Peticion) objRecibido);
 
 		else
 			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
 	}
 
 	public void procesarPeticion(Usuario usuario, Peticion peticion) {
-		server.modulos.ProcesarPeticiones.procesar(usuario, peticion);
+//		server.modulos.ProcesarPeticiones.procesar(usuario, peticion);
 	}
 	
 	// EVENTOS
-	public void onObjetoRecibido(Usuario usuario, Object objRecibido) {
-		System.out.println("@ Objeto recibido de " + usuario.getNombre());
-		procesar(usuario, objRecibido);
+	public void onUsuarioObjetoRecibido(Usuario usuario, Object objRecibido) {
+		System.out.println("@ Objeto recibido de " + usuario.getPerfil().getNombre() + " => " + objRecibido.getClass().getSimpleName());
+		//procesar(usuario, objRecibido);
 	}
 	
 	public void onDesconectado(Usuario usuario) {

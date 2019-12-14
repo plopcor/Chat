@@ -1,16 +1,13 @@
 package classes.conexion;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 
 import classes.peticion.Peticion;
 
@@ -42,14 +39,14 @@ public class Conexion implements Runnable {
 	// METODOS
 	//
 	public void start() {
-		// Empezar lectura
+		// Empezar lectura para recibir datos
 		this.readThread = new Thread(this);
 		this.readThread.start();
 	}
 	
 	public void run() {
 		
-		// Leer objetos
+		// Crear stream de objetos
 		ObjectInputStream objInputStream;
 		
 		try {
@@ -60,6 +57,8 @@ public class Conexion implements Runnable {
 			return;
 		}
 		
+		// Leer objetos
+		
 		Object objRecibido;
 
 		try {
@@ -68,7 +67,7 @@ public class Conexion implements Runnable {
 			
 			// Accionar evento
 			if(eventos != null)
-				this.eventos.onMensajeEnviado(objRecibido);
+				this.eventos.onConexionObjetoRecibido(objRecibido);
 			
 		} catch (ClassNotFoundException e) {
 			System.err.println("Error al leer objeto serializado, clase desconocida");
@@ -78,54 +77,16 @@ public class Conexion implements Runnable {
 			System.err.println("Error al leer objeto serializado");
 			e.printStackTrace();
 		}
-
-			
-			
-			
-//			if(obj instanceof Peticion) {
-//				procesarPeticion((Peticion) obj);
-//			}
-			
-
-		
-		
-		///////////////////////77
-		BufferedReader in = null;
-    	String data = null;
-    	
-    	// Cojer input stream de la conexion
-		in = new BufferedReader(new InputStreamReader(inputStream));
-
-		do {
-
-			try {
-				
-				// Leer datos
-				data = in.readLine();
-
-				// Accionar evento
-				if(eventos != null)
-					this.eventos.onMensajeEnviado(data);
-
-			} catch (SocketException e) {
-				
-				// Si el usuaro se desconecta
-				if(eventos != null)
-					this.eventos.onDesconectado();
-				data = null;
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.err.println("[Error] Error al leer datos del cliente (" + this.getIP() + ")");
-				data = null;
-			}
-
-		} while (data != null);
 	}
 	
 	public void sendString(String data) {
+		data = data.trim();
+		
+		if(data.isEmpty())
+			return;
+		
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(this.getOutputStream()), true);
-		out.println(data.trim());
+		out.println(data);
 		out.flush();
 	}
 	
@@ -137,7 +98,9 @@ public class Conexion implements Runnable {
 		}
 		
 		// ENVIAR PETICION SERIALIZADA
-		try (ObjectOutputStream objOutStream = new ObjectOutputStream(this.getOutputStream());) {
+		try {
+			
+			ObjectOutputStream objOutStream = new ObjectOutputStream(this.getOutputStream());
 			
 			objOutStream.writeObject(peticion);
 			
