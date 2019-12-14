@@ -1,20 +1,23 @@
-package classes.peticion.bodies;
+package classes;
 
-public class BodyDatosUsuario extends Body {
+import java.io.Serializable;
 
+public class Perfil implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	String nombre;
 	
-	
 	// CONSTRUCTOR
-	
-	public BodyDatosUsuario() {
+	public Perfil() {
 		this.nombre = "Anonimo";
 	}
 	
-	public BodyDatosUsuario(String nombre) {
+	public Perfil(String nombre) {
 		this.nombre = nombre;
 	}
 
+	
 	// GETTERS & SETTERS
 	
 	public String getNombre() {

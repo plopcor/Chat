@@ -1,19 +1,20 @@
-package classes.usuarios;
+package classes.usuario;
 
 import java.net.Socket;
 
+import classes.Perfil;
 import classes.conexion.Conexion;
 import classes.conexion.EventosConexion;
 
 public class Usuario implements EventosConexion {
 
-	private String nombre;
+	private Perfil perfil;
 	private Conexion conexion;
 	private EventosUsuario eventos;
 	
 	public Usuario(Socket socketCliente) {
 
-		this.nombre = "Anonimo";
+		this.perfil = new Perfil("Anonimo");
 		this.conexion = new Conexion(socketCliente);
 		this.conexion.setEventos(this);
 		
@@ -28,35 +29,43 @@ public class Usuario implements EventosConexion {
 		this.conexion.sendString(data);
 	}
 	
-	// GETTERS & SETTERS
-	public String getNombre() {
-		return this.nombre;
+	public void procesarObjetoRecibido(Object obj) {
+		
+//		if(obj instanceof Peticion) {
+//			procesarPeticion(obj);
+//		}
+		
 	}
 	
-	public void setNombre(String nombre) {
-		if(nombre.length() > 35)
-			nombre = nombre.substring(0, 35);
-		else if (nombre.length() == 0)
-			nombre = "Anonimo";
-		this.nombre = nombre;
+	// GETTERS & SETTERS
+	public Perfil getPerfil() {
+		return this.perfil;
+	}
+	
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 	
 	public Conexion getConexion() {
 		return this.conexion;
 	}
+	
 	public void setEventos(EventosUsuario eventos) {
 		this.eventos = eventos;
 	}
 	
-	// EVENTS
-	public void onMensajeEnviado(String mensaje) {
+	
+	// EVENTOS
+	
+	public void onConexionObjetoRecibido(Object objRecibido) {
+		System.out.println("Objeto recibido");
 		if(eventos != null)
-			this.eventos.onMensajeRecibido(this, mensaje);
+			this.eventos.onUsuarioObjetoRecibido(this, objRecibido);
 	}
-
+	
 	public void onDesconectado() {
 		if(eventos != null)
-			this.eventos.onDesconectado(this);
+			this.eventos.onUsuarioDesconectado(this);
 	}
 	
 }

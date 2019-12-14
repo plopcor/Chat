@@ -1,7 +1,7 @@
-package server.modulos;
+package cliente.modulos;
 
 import classes.usuario.Usuario;
-import server.Backend;
+import cliente.Cliente;
 import classes.Perfil;
 import classes.peticion.*;
 
@@ -9,7 +9,7 @@ public class ProcesarPeticiones {
 
 	public static void procesar(Usuario usuario, Peticion peticion) {
 
-		Backend.log("@ Recibido peticion de \"" + usuario.getPerfil().getNombre() + "\"");
+		Cliente.log("@ Recibido peticion de \"" + usuario.getPerfil().getNombre() + "\"");
 		
 		if(peticion instanceof PeticionDatosUsuario)
 			procesarPeticionDatos(usuario, (PeticionDatosUsuario) peticion);
@@ -32,46 +32,39 @@ public class ProcesarPeticiones {
 	//
 	
 	private static void procesarPeticionDatos(Usuario usuario, PeticionDatosUsuario p) {
-		
 		// DEBUG
-		Backend.log("# RECIBIDO => Datos de usuario");
-		
-		if(!p.hasPerfil())
-			return;		
-		
-		// Modificar perfil del usuario con los datos recibidos
-		Perfil perfilDatos = p.getPerfil();
-		Perfil perfilUsuario = usuario.getPerfil();
-		
-		// Cambiar nombre
-		if(perfilDatos.getNombre().length() > 0)
-			perfilUsuario.setNombre(perfilDatos.getNombre());
+		Cliente.log("# RECIBIDO => Datos de usuario");
 	} 
 	
 	private static void procesarPeticionMensaje(Usuario usuario, PeticionMensaje p) {
 		
 		// DEBUG
-		Backend.log("# RECIBIDO => Mensaje");
+		Cliente.log("# RECIBIDO => Mensaje");
 		
 		if(p.getMensaje().length() == 0)
 			return;
-
-		// Poner emisor del mensaje (para retransmitirlo a los demas clientes)
-		p.getHeader().setPerfilEmisor(usuario.getPerfil());
-
-		System.out.println("[" + usuario.getPerfil().getNombre() + "]: " + p.getMensaje() );
-		Backend.log("@ Reenviando mensaje");
 		
-		// Re-enviar mensaje a todos los demas usuarios
-		Backend.getInstance().emitirPeticionRecibida(usuario, p);	
+		// Ver emisor del mensaje 
+		Perfil emisor = p.getHeader().getPerfilEmisor();
+		
+		// Construir mensaje para mostrarlo
+		String mensaje = "";
+		
+		if(emisor != null)
+			mensaje += "[" + emisor.getNombre() + "]: ";
+		else
+			mensaje += "[DESCONOCIDO]: ";
 
-		// Trigger evento de onUsuarioMensajeRecibido???
+		mensaje += p.getMensaje();
+
+		System.out.println(mensaje);
+		
 	}
 	
 	private static void procesarPeticionNotificacion(Usuario usuario, PeticionNotificacion p) {
 		
 		// DEBUG
-		Backend.log("# RECIBIDO => Notificacion");
+		Cliente.log("# RECIBIDO => Notificacion");
 		
 	}
 
