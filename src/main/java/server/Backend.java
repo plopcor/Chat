@@ -34,6 +34,9 @@ public class Backend implements EventosUsuario {
     	// Si el usuario se conecta correctamente
     	System.out.println("Cliente conectado: " + usuario.getConexion().getIP());
 		
+    	// Informar de la conexion a los demas clientes
+    	emitirPeticion(new PeticionMensaje("Usuario conectado"));
+    	
     	// Cojer eventos
     	usuario.setEventos(this);
     	
@@ -47,7 +50,7 @@ public class Backend implements EventosUsuario {
     public void desconectarUsuario(Usuario usuario) {
     	System.out.println("@ " + usuario.getPerfil().getNombre() + " se ha desconectado.");
     	if (usuarios.remove(usuario))
-    		emitirPeticion(new PeticionMensaje(usuario.getConexion().getIP() + " desconectado"));
+    		emitirPeticion(new PeticionMensaje(usuario.getPerfil().getNombre() + " desconectado"));
     }
     
     public static void log(String texto) {
@@ -73,8 +76,7 @@ public class Backend implements EventosUsuario {
 		// Emitir peticion a todos menos al usuario especificado (el emisor)
 		for(Usuario u : usuarios)
 			if(usuario != u)
-				u.getConexion().sendPeticion(peticion);
-				//u.getConexion().sendString("[" + usuario.getNombre() + "]: " + mensaje);		
+				u.getConexion().sendPeticion(peticion);	
 	}
 	
 	public void procesar(Usuario usuario, Object objRecibido) {
@@ -92,7 +94,7 @@ public class Backend implements EventosUsuario {
 	
 	// EVENTOS
 	public void onUsuarioObjetoRecibido(Usuario usuario, Object objRecibido) {
-		System.out.println("@ Objeto recibido de " + usuario.getPerfil().getNombre() + " => " + objRecibido.getClass().getSimpleName());
+		Backend.log("@ Objeto recibido de " + usuario.getPerfil().getNombre() + " => " + objRecibido.getClass().getSimpleName());
 		procesar(usuario, objRecibido);
 	}
 	

@@ -25,17 +25,9 @@ public class Usuario implements EventosConexion {
 		this.conexion.start();
 	}
 
-	public void enviarMensaje(String data) {
-		this.conexion.sendString(data);
-	}
-	
-	public void procesarObjetoRecibido(Object obj) {
-		
-//		if(obj instanceof Peticion) {
-//			procesarPeticion(obj);
-//		}
-		
-	}
+//	public void enviarMensaje(String data) {
+//		this.conexion.sendString(data);
+//	}
 	
 	// GETTERS & SETTERS
 	public Perfil getPerfil() {
@@ -58,7 +50,7 @@ public class Usuario implements EventosConexion {
 	// EVENTOS
 	
 	public void onConexionObjetoRecibido(Object objRecibido) {
-		System.out.println("Objeto recibido");
+//		System.out.println("Objeto recibido");
 		if(eventos != null)
 			this.eventos.onUsuarioObjetoRecibido(this, objRecibido);
 	}
