@@ -3,6 +3,8 @@ package server;
 import java.util.ArrayList;
 
 import classes.notificacion.Notificacion;
+import classes.notificacion.NotificacionConexion;
+import classes.notificacion.NotificacionDesconexion;
 import classes.peticion.Peticion;
 import classes.peticion.PeticionMensaje;
 import classes.usuario.EventosUsuario;
@@ -36,8 +38,9 @@ public class Backend implements EventosUsuario {
     	System.out.println("Cliente conectado: " + usuario.getConexion().getIP());
 		
     	// Informar de la conexion a los demas clientes
-    	// @@@ HA DE ENVIAR UNA "NotificacionConexion" NO UNA "PeticionMensaje" 
-    	emitirPeticion(new PeticionMensaje("Usuario conectado"));
+    	// @@@ HA DE ENVIAR UNA "NotificacionConexion" NO UNA "PeticionMensaje"
+    	//emitirPeticion(new PeticionMensaje("Usuario conectado"));
+    	emitirNotificacion(new NotificacionConexion(usuario.getPerfil()));
     	
     	// Cojer eventos
     	usuario.setEventos(this);
@@ -52,7 +55,8 @@ public class Backend implements EventosUsuario {
     public void desconectarUsuario(Usuario usuario) {
     	System.out.println("@ " + usuario.getPerfil().getNombre() + " se ha desconectado.");
     	if (usuarios.remove(usuario))
-    		emitirPeticion(new PeticionMensaje(usuario.getPerfil().getNombre() + " desconectado"));
+    		this.emitirNotificacion(new NotificacionDesconexion(usuario.getPerfil()));
+    		//emitirPeticion(new PeticionMensaje(usuario.getPerfil().getNombre() + " desconectado"));
     }
     
     public static void log(String texto) {
@@ -102,6 +106,9 @@ public class Backend implements EventosUsuario {
 		if(objRecibido instanceof Peticion)
 			server.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
 
+		else if (objRecibido instanceof Notificacion)
+			cliente.modulos.ProcesarNotificaciones.procesar(usuario (Notificacion) objRecibido);
+		
 		else
 			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
 	}

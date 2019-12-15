@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+import classes.notificacion.Notificacion;
 import classes.peticion.Peticion;
 
 public class Conexion implements Runnable {
@@ -109,20 +110,31 @@ public class Conexion implements Runnable {
 			return;
 		}
 		
-		// ENVIAR PETICION SERIALIZADA
+		sendObjeto(peticion);
+	}
+	
+	public void sendNotificacion(Notificacion notificacion) {
+		if(notificacion == null) {
+			System.err.println("Error: La notificacion es nula, intento de envio fallido");
+			return;
+		}
+		
+		sendObjeto(notificacion);
+	}
+	
+	// Enviar objetos serializados
+	private void sendObjeto(Object objeto) {
 		try {
-			
-			objOutStream.writeObject(peticion);
+
+			objOutStream.writeObject(objeto);
 			objOutStream.flush();
-			
 //			System.out.println("[Correcto] Peticion enviada");
-			
+
 		} catch (IOException e) {
-			System.err.println("Error al enviar peticion (Escriptura de objeto)");
+			System.err.println("Error al enviar objeto de tipo \"" + objeto.getClass().getSimpleName()+ "\". Escriptura de objeto fallida");
 			e.printStackTrace();
 		}
 	}
-	
 	
 	// GETTERS & SETTERS
 	public Socket getSocket() {

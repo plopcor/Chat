@@ -17,9 +17,6 @@ public class ProcesarPeticiones {
 		else if (peticion instanceof PeticionMensaje) // Incluye "MensajeConAdjuntos"
 			procesarPeticionMensaje(usuario, (PeticionMensaje) peticion);
 		
-		else if (peticion instanceof PeticionNotificacion)
-			procesarPeticionNotificacion(usuario, (PeticionNotificacion) peticion);
-		
 		else {
 			System.err.println("[INFO] No se ha podido procesar la peticion");
 			System.err.println("[INFO] Tipo de peticion desconocido => \""+ peticion.getClass().getSimpleName() + "\"");
@@ -58,13 +55,6 @@ public class ProcesarPeticiones {
 		mensaje += p.getMensaje();
 
 		System.out.println(mensaje);
-		
-	}
-	
-	private static void procesarPeticionNotificacion(Usuario usuario, PeticionNotificacion p) {
-		
-		// DEBUG
-		Cliente.log("# RECIBIDO => Notificacion");
 		
 	}
 

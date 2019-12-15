@@ -63,7 +63,7 @@ public class Cliente implements EventosUsuario {
     	
     	do {
     		
-        	System.out.println("Nombre de usuario (30 caracteres max):");
+        	System.out.println("# Nombre de usuario (30 caracteres max):");
     		nombre = scn.nextLine().trim();
     		
     	} while (nombre.isEmpty() || nombre.length() > 30);

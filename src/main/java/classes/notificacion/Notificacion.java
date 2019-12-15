@@ -1,7 +1,9 @@
 package classes.notificacion;
 
-public class Notificacion {
+import java.io.Serializable;
 
-	
-	
+public abstract class Notificacion implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 }
