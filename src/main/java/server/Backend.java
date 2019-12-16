@@ -107,7 +107,7 @@ public class Backend implements EventosUsuario {
 			server.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
 
 		else if (objRecibido instanceof Notificacion)
-			cliente.modulos.ProcesarNotificaciones.procesar(usuario (Notificacion) objRecibido);
+			cliente.modulos.ProcesarNotificaciones.procesar(usuario, (Notificacion) objRecibido);
 		
 		else
 			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
