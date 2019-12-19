@@ -1,0 +1,6 @@
+
+
+
+# Controlar eventos de la aplicacion desde el objeto actual (Controlador de la vista):
+Cliente cliente = new Cliente();
+cliente.getGestor().setEventos(this);

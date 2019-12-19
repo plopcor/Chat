@@ -1,11 +1,14 @@
 package server.modulos;
 
+import classes.core.EventosCore;
 import classes.notificacion.*;
 import classes.usuario.Usuario;
 import server.Backend;
 
 public class ProcesarNotificaciones {
 
+	public static EventosCore eventos;
+	
 	public static void procesar(Usuario usuario, Notificacion notificacion) {
 
 		Backend.log("@ Recibido notificacion de \"" + usuario.getPerfil().getNombre() + "\"");
@@ -29,11 +32,15 @@ public class ProcesarNotificaciones {
 	private static void procesarNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
 		// DEBUG
 		Backend.log("# RECIBIDO => Conexion");
+		if(eventos != null)
+			eventos.onNotificacionConexion(usuario, notificacion);
 	}
 
 	private static void procesarNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
 		// DEBUG
 		Backend.log("# RECIBIDO => Desconexion");
+		if(eventos != null)
+			eventos.onNotificacionDesconexion(usuario, notificacion);
 	}
 	
 }

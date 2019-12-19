@@ -80,16 +80,18 @@ public class Cliente implements EventosUsuario {
     }
     
     public void procesar(Usuario usuario, Object objRecibido) {
-
-		if(objRecibido == null)
-			return;
-		
-		// Ver tipo de objeto
-		if(objRecibido instanceof Peticion)
-			cliente.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
-
-		else
-			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
+    	
+    	classes.core.Procesar.procesar(usuario, objRecibido);
+    	
+//		if(objRecibido == null)
+//			return;
+//		
+//		// Ver tipo de objeto
+//		if(objRecibido instanceof Peticion)
+//			cliente.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
+//
+//		else
+//			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
 	}
     
     // GETTERS & SETTERS
