@@ -6,24 +6,27 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import classes.Perfil;
-import classes.peticion.Peticion;
 import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
-import classes.usuario.EventosUsuario;
 import classes.usuario.Usuario;
+import gestores.Gestor;
 
-public class Cliente implements EventosUsuario {
+public class Cliente{
 
 	private Usuario usuario;
     private Scanner scn;
     private static boolean debugMode = false;
+    private Gestor gestor;
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         try {
-        	
+        	// Crear gestor y usuario
+        	gestor = new Gestor();
         	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
         	this.scn = new Scanner(System.in);
-        	this.usuario.setEventos(this);
+        	
+        	// Enviar eventos del usuario al gestor
+        	this.usuario.setEventos(gestor);
         	
         	enviarDatosUsuario();
         	
@@ -79,55 +82,14 @@ public class Cliente implements EventosUsuario {
     	   	
     }
     
-    public void procesar(Usuario usuario, Object objRecibido) {
-    	
-    	classes.core.Procesar.procesar(usuario, objRecibido);
-    	
-//		if(objRecibido == null)
-//			return;
-//		
-//		// Ver tipo de objeto
-//		if(objRecibido instanceof Peticion)
-//			cliente.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
-//
-//		else
-//			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
-	}
-    
     // GETTERS & SETTERS
     public Usuario getUsuario() {
     	return this.usuario;
     }
-
-    
-    // EVENTOS
-
-	@Override
-	public void onUsuarioObjetoRecibido(Usuario usuario, Object objRecibido) {
-		
-		System.out.println("Objeto recibido");
-		procesar(usuario, objRecibido);
-		
-	}
-
-	@Override
-	public void onUsuarioDesconectado(Usuario usuario) {
-		System.out.println("Te has desconectado");
-	}
     
 	public static void log(String texto) {
 		if(debugMode)
 			System.out.println(texto);
 	}
-	
-//	public void onMensajeRecibido(Usuario usuario, Object objRecibido) {
-//		System.out.println("Objeto recibido");
-//		
-////		System.out.println("[Mensaje] "+ usuario.getConexion().getIP() + ": " + mensaje);
-//	}
-
-//	public void onDesconectado(Usuario usuario) {
-//		System.out.println("[Desconectado] " + usuario.getConexion().getIP());
-//	}
     
 }

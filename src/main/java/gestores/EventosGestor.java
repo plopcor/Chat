@@ -15,7 +15,7 @@ public interface EventosGestor {
 	void onProcesadoDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion);
 	
 	// Notificaciones
-	void onProcesadoNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion);
 	void onProcesadoNotificacionConexion(Usuario usuario, NotificacionConexion notificacion);
+	void onProcesadoNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion);
 	
 }

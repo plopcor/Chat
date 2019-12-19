@@ -12,7 +12,6 @@ public interface EventosAplicacion {
 	void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion);
 	
 	// Notificaciones
-	void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion);
 	void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion);
-	
+	void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion);
 }

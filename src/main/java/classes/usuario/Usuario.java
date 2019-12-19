@@ -24,10 +24,6 @@ public class Usuario implements EventosConexion {
 	public void start() {
 		this.conexion.start();
 	}
-
-//	public void enviarMensaje(String data) {
-//		this.conexion.sendString(data);
-//	}
 	
 	// GETTERS & SETTERS
 	public Perfil getPerfil() {
@@ -50,7 +46,6 @@ public class Usuario implements EventosConexion {
 	// EVENTOS
 	
 	public void onConexionObjetoRecibido(Object objRecibido) {
-//		System.out.println("Objeto recibido");
 		if(eventos != null)
 			this.eventos.onUsuarioObjetoRecibido(this, objRecibido);
 	}

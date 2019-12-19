@@ -1,6 +1,15 @@
 
+#### Ruta de los eventos
+
+# Cliente => Usuario => Conexion (Crea eventos)
+- @Evento: Conexion => Usuario => Gestor => GestorPeticion => [Processar] (Crea Evento2)
+- @Evento2: GestorPeticion => Gestor => (Event-Handler que decidamos, generalmente un Controlador de la vista)
+
+# Generalmente un Controlador de la vista recoje los eventos creados por el Gestor del Cliente/Servidor
 
 
-# Controlar eventos de la aplicacion desde el objeto actual (Controlador de la vista):
-Cliente cliente = new Cliente();
+-------------------------------------------------------------------------------------
+
+# Controlar eventos de la aplicacion desde el objeto actual (Controlador de una vista):
+Cliente cliente = new Cliente(<ip>, <puerto>);
 cliente.getGestor().setEventos(this);

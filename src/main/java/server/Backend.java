@@ -104,6 +104,7 @@ public class Backend implements EventosUsuario {
 		
 		// Ver tipo de objeto
 		if(objRecibido instanceof Peticion)
+			
 			server.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
 
 		else if (objRecibido instanceof Notificacion)

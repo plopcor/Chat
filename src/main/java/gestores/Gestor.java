@@ -1,7 +1,5 @@
 package gestores;
 
-import classes.core.ProcesarNotificaciones;
-import classes.core.ProcesarPeticiones;
 import classes.notificacion.Notificacion;
 import classes.notificacion.NotificacionConexion;
 import classes.notificacion.NotificacionDesconexion;
@@ -9,10 +7,11 @@ import classes.peticion.Peticion;
 import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
 import classes.peticion.PeticionMensajeConAdjuntos;
+import classes.usuario.EventosUsuario;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
 
-public class Gestor implements EventosGestor {
+public class Gestor implements EventosUsuario, EventosGestor {
 
 	private GestorNotificaciones gestorNotificaciones;
 	private GestorPeticiones gestorPeticiones;
@@ -49,36 +48,48 @@ public class Gestor implements EventosGestor {
 	}
 
 	
-	// EVENTOS DE PROCESAR
+	// EVENTOS DE ENTRADA
+	
+	@Override
+	public void onUsuarioObjetoRecibido(Usuario usuario, Object objRecibido) {
+		procesar(usuario, objRecibido);		
+	}
+
+	@Override
+	public void onUsuarioDesconectado(Usuario usuario) {
+		
+	}
+	
+	// EVENTOS DE PROCESAR / SALIDA
 	
 	@Override
 	public void onProcesadoMensaje(Usuario usuario, PeticionMensaje peticion) {
-		// TODO Auto-generated method stub
-		
+		if(eventos != null)
+			eventos.onMensaje(usuario, peticion);
 	}
 
 	@Override
 	public void onProcesadoMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
-		// TODO Auto-generated method stub
-		
+		if(eventos != null)
+			eventos.onMensajeConAdjuntos(usuario, peticion);
 	}
 
 	@Override
 	public void onProcesadoDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onProcesadoNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
-		// TODO Auto-generated method stub
-		
+		if(eventos != null)
+			eventos.onDatosUsuario(usuario, peticion);
 	}
 
 	@Override
 	public void onProcesadoNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
-		// TODO Auto-generated method stub
-		
+		if(eventos != null)
+			eventos.onNotificacionConexion(usuario, notificacion);
+	}
+	
+	@Override
+	public void onProcesadoNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
+		if(eventos != null)
+			eventos.onNotificacionDesconexion(usuario, notificacion);
 	}
 	
 }
