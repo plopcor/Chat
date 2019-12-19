@@ -24,7 +24,7 @@ public class Servidor {
     		System.err.println("Error al crear el servidor " + e.getMessage());
     	}
     	
-    	backend = Backend.getInstance();
+    	backend = new Backend();
     }
     
     

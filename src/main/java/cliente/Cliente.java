@@ -9,19 +9,19 @@ import classes.Perfil;
 import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
 import classes.usuario.Usuario;
-import gestores.Gestor;
+import gestores.BORRAR_Gestor;
 
 public class Cliente{
 
 	private Usuario usuario;
     private Scanner scn;
     private static boolean debugMode = false;
-    private Gestor gestor;
+    private BORRAR_Gestor gestor;
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         try {
         	// Crear gestor y usuario
-        	gestor = new Gestor();
+        	gestor = new BORRAR_Gestor();
         	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
         	this.scn = new Scanner(System.in);
         	

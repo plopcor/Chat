@@ -9,22 +9,22 @@ import classes.peticion.Peticion;
 import classes.peticion.PeticionMensaje;
 import classes.usuario.EventosUsuario;
 import classes.usuario.Usuario;
+import gestores.Gestor_Servidor;
 
 public class Backend implements EventosUsuario {
 
-	public static Backend backend;
+	public Backend backend;
     private ArrayList<Usuario> usuarios;
-    private static boolean debugMode = false;
-	
-    // CONSTRUCTOR
-    private Backend() {
-    	usuarios = new ArrayList<Usuario>();
-    }
+    private boolean debugMode = false;
+    private Gestor_Servidor gestor;
     
-    public static Backend getInstance() {
-    	if(backend == null)
-    		backend = new Backend();
-    	return backend;
+    // CONSTRUCTOR
+    public Backend() {
+    	
+    	// Crear gestor del servidor
+    	gestor = new Gestor_Servidor();
+    	// Lista de usuarios
+    	usuarios = new ArrayList<Usuario>();
     }
     
     // METODOS
@@ -38,12 +38,10 @@ public class Backend implements EventosUsuario {
     	System.out.println("Cliente conectado: " + usuario.getConexion().getIP());
 		
     	// Informar de la conexion a los demas clientes
-    	// @@@ HA DE ENVIAR UNA "NotificacionConexion" NO UNA "PeticionMensaje"
-    	//emitirPeticion(new PeticionMensaje("Usuario conectado"));
     	emitirNotificacion(new NotificacionConexion(usuario.getPerfil()));
     	
-    	// Cojer eventos
-    	usuario.setEventos(this);
+    	// Enviar eventos de los usuarios al gestor del servidor
+    	usuario.setEventos(this.gestor); //this);
     	
 		// Empezar a leer datos
     	usuario.start();
@@ -59,7 +57,7 @@ public class Backend implements EventosUsuario {
     		//emitirPeticion(new PeticionMensaje(usuario.getPerfil().getNombre() + " desconectado"));
     }
     
-    public static void log(String texto) {
+    public void log(String texto) {
 		if(debugMode)
 			System.out.println(texto);
 	}
@@ -104,6 +102,7 @@ public class Backend implements EventosUsuario {
 		
 		// Ver tipo de objeto
 		if(objRecibido instanceof Peticion)
+			
 			
 			server.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
 
