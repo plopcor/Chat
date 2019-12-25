@@ -160,4 +160,9 @@ public class Backend implements EventosAplicacion {
 		desconectarUsuario(usuario);
 	}
 
+	@Override
+	public void onNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
+		log("@ [ERROR - NO TENDRIA QUE RECIBIR NINGUNA] Notificacion perfil actualizado de " + usuario.getPerfil().getNombre() + " [" + usuario.getConexion().getIP() + "]");
+	}
+
 }

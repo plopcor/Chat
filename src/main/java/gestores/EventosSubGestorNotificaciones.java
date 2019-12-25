@@ -8,5 +8,5 @@ public interface EventosSubGestorNotificaciones {
 	// Notificaciones
 	void onProcesadoNotificacionConexion(Usuario usuario, NotificacionConexion notificacion);
 	void onProcesadoNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion);
-	
+	void onProcesadoNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion);
 }

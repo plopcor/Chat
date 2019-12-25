@@ -6,11 +6,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import classes.Perfil;
-import classes.notificacion.NotificacionConexion;
-import classes.notificacion.NotificacionDesconexion;
-import classes.peticion.PeticionDatosUsuario;
-import classes.peticion.PeticionMensaje;
-import classes.peticion.PeticionMensajeConAdjuntos;
+import classes.notificacion.*;
+import classes.peticion.*;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
 import gestores.GestorCliente;
@@ -128,6 +125,12 @@ public class Cliente implements EventosAplicacion {
 	@Override
 	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
 		log("@ Usuario desconectado => " + notificacion.getPerfilUsuario().getNombre());
+	}
+
+	@Override
+	public void onNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
+		log("@ Usuario ha actualizado perfil => \n" + notificacion.toString());
+		
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import classes.notificacion.NotificacionConexion;
 import classes.notificacion.NotificacionDesconexion;
+import classes.notificacion.NotificacionPerfilActualizado;
 import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
 import classes.peticion.PeticionMensajeConAdjuntos;
@@ -76,5 +77,10 @@ public class Principal implements EventosAplicacion {
 	@Override
 	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
 		System.out.println("Usuario " + notificacion.getPerfilUsuario().getNombre() + " desconectado.");		
+	}
+
+	@Override
+	public void onNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
+		System.out.println("[ERROR] EL SERVIDOR NO HA DE RECIBIR ESTA NOTIFICACION, YA LA CREA EL AL RECIBIR UNA PETICION DE DATOS");
 	}
 }

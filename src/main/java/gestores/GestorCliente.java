@@ -1,12 +1,7 @@
 package gestores;
 
-import classes.notificacion.Notificacion;
-import classes.notificacion.NotificacionConexion;
-import classes.notificacion.NotificacionDesconexion;
-import classes.peticion.Peticion;
-import classes.peticion.PeticionDatosUsuario;
-import classes.peticion.PeticionMensaje;
-import classes.peticion.PeticionMensajeConAdjuntos;
+import classes.notificacion.*;
+import classes.peticion.*;
 import classes.usuario.EventosUsuario;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
@@ -90,6 +85,12 @@ public class GestorCliente implements EventosUsuario, EventosSubGestorPeticiones
 	public void onProcesadoNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
 		if(eventos != null)
 			eventos.onNotificacionDesconexion(usuario, notificacion);
+	}
+
+	@Override
+	public void onProcesadoNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
+		if(eventos != null)
+			eventos.onNotificacionPerfilActualizado(usuario, notificacion);		
 	}
 	
 }
