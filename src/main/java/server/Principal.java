@@ -3,11 +3,23 @@ package server;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Principal {
+import classes.notificacion.NotificacionConexion;
+import classes.notificacion.NotificacionDesconexion;
+import classes.peticion.PeticionDatosUsuario;
+import classes.peticion.PeticionMensaje;
+import classes.peticion.PeticionMensajeConAdjuntos;
+import classes.usuario.Usuario;
+import general.EventosAplicacion;
+
+public class Principal implements EventosAplicacion {
 
 	public static Scanner scn = new Scanner(System.in);
 
 	public static void main(String[] args) {
+		new Principal().iniciar();
+	}
+	
+	public void iniciar() {
 		int port;
 
 		do {
@@ -32,7 +44,37 @@ public class Principal {
         System.out.println("- Host: " + srv.getSocketAddress().getHostAddress());
         System.out.println("- Port: " + srv.getPort());
         
+        // Recojer eventos del backend
+        //srv.getBackend().setEventos(this);
+    
         srv.listen();
 		
+	}
+
+	@Override
+	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
+		System.out.println("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje());
+	}
+
+	@Override
+	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
+		System.out.println("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje());
+		System.out.println("*Ajuntos*");
+	}
+
+	@Override
+	public void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
+		System.out.println("Informacion de perfil cambiada => " + peticion.getPerfil().getNombre());
+		
+	}
+
+	@Override
+	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
+		System.out.println("Usuario " + notificacion.getPerfilUsuario().getNombre() + " conectado.");
+	}
+
+	@Override
+	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
+		System.out.println("Usuario " + notificacion.getPerfilUsuario().getNombre() + " desconectado.");		
 	}
 }

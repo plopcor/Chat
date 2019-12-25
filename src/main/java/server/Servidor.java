@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +19,8 @@ public class Servidor {
     		if (ipAddress != null && !ipAddress.isEmpty()) 
     			this.server = new ServerSocket(port, 1, InetAddress.getByName(ipAddress));
     		else
-    			this.server = new ServerSocket(port, 1, InetAddress.getLocalHost());
+    			this.server = new ServerSocket(port, 32, Inet4Address.getLocalHost());
+    			// this.server = new ServerSocket(port, 1, InetAddress.getLocalHost());
     		
     	} catch (Exception e) {
     		System.err.println("Error al crear el servidor " + e.getMessage());
@@ -42,7 +44,7 @@ public class Servidor {
 				// Crear nuevo cliente conectado
 				Usuario usuarioConectado = new Usuario(cliente);
 				
-				// Añadir a la lista i empezar a leer datos
+				// Aï¿½adir a la lista i empezar a leer datos
 				backend.conectarUsuario(usuarioConectado);
 				
 			} catch (IOException e) {
@@ -62,6 +64,10 @@ public class Servidor {
     
     public int getPort() {
         return this.server.getLocalPort();
+    }
+    
+    public Backend getBackend() {
+    	return this.backend;
     }
     
     

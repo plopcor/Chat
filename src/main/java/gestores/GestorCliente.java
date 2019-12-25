@@ -11,22 +11,22 @@ import classes.usuario.EventosUsuario;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
 
-public class BORRAR_Gestor implements EventosUsuario, EventosGestor {
+public class GestorCliente implements EventosUsuario, EventosSubGestorPeticiones, EventosSubGestorNotificaciones {
 
-	private GestorNotificaciones gestorNotificaciones;
-	private GestorPeticiones gestorPeticiones;
+	private SubGestorNotificaciones gestorNotificaciones;
+	private SubGestorPeticiones gestorPeticiones;
 	private EventosAplicacion eventos;
 	
 	// CONSTRUCTOR
 	
-	public BORRAR_Gestor() {
+	public GestorCliente() {
 		
 		// Crear sub-gestores y poner este objeto como event-handler 
-		this.gestorNotificaciones = new GestorNotificaciones(this);
-		this.gestorPeticiones = new GestorPeticiones(this);
+		this.gestorNotificaciones = new SubGestorNotificaciones(this);
+		this.gestorPeticiones = new SubGestorPeticiones(this);
 	}
 	
-	public BORRAR_Gestor(EventosAplicacion eventos) {
+	public GestorCliente(EventosAplicacion eventos) {
 		this();
 		this.eventos = eventos;
 	}

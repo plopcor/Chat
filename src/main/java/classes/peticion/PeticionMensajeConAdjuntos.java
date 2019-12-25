@@ -22,7 +22,7 @@ public class PeticionMensajeConAdjuntos extends PeticionMensaje {
 	}
 	
 	
-	public boolean añadirFichero(Fichero fichero) {
+	public boolean aÃ±adirFichero(Fichero fichero) {
 		return this.ficheros.add(fichero);
 	}	
 

@@ -11,22 +11,22 @@ import classes.usuario.EventosUsuario;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
 
-public class Gestor_Servidor implements EventosUsuario, EventosGestor {
+public class GestorServidor implements EventosUsuario, EventosSubGestorPeticiones, EventosSubGestorNotificaciones {
 
-	private GestorNotificaciones gestorNotificaciones;
-	private GestorPeticiones gestorPeticiones;
+	private SubGestorNotificaciones gestorNotificaciones;
+	private SubGestorPeticiones gestorPeticiones;
 	private EventosAplicacion eventos;
 	
 	// CONSTRUCTOR
 	
-	public Gestor_Servidor() {
+	public GestorServidor() {
 		
 		// Crear sub-gestores y poner este objeto como event-handler 
-		this.gestorNotificaciones = new GestorNotificaciones(this);
-		this.gestorPeticiones = new GestorPeticiones(this);
+		this.gestorNotificaciones = new SubGestorNotificaciones(this);
+		this.gestorPeticiones = new SubGestorPeticiones(this);
 	}
 	
-	public Gestor_Servidor(EventosAplicacion eventos) {
+	public GestorServidor(EventosAplicacion eventos) {
 		this();
 		this.eventos = eventos;
 	}
@@ -57,7 +57,7 @@ public class Gestor_Servidor implements EventosUsuario, EventosGestor {
 
 	@Override
 	public void onUsuarioDesconectado(Usuario usuario) {
-		
+		this.gestorNotificaciones.procesar(usuario, new NotificacionDesconexion(usuario.getPerfil()));
 	}
 	
 	// EVENTOS DE PROCESAR / SALIDA
@@ -90,6 +90,13 @@ public class Gestor_Servidor implements EventosUsuario, EventosGestor {
 	public void onProcesadoNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
 		if(eventos != null)
 			eventos.onNotificacionDesconexion(usuario, notificacion);
+	}
+
+
+	// GETTERS & SETTERS
+	
+	public void setEventos(EventosAplicacion eventos) {
+		this.eventos = eventos;
 	}
 	
 }

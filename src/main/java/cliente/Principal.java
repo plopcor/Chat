@@ -5,11 +5,23 @@ import java.net.UnknownHostException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Principal {
+import classes.notificacion.NotificacionConexion;
+import classes.notificacion.NotificacionDesconexion;
+import classes.peticion.PeticionDatosUsuario;
+import classes.peticion.PeticionMensaje;
+import classes.peticion.PeticionMensajeConAdjuntos;
+import classes.usuario.Usuario;
+import general.EventosAplicacion;
+
+public class Principal implements EventosAplicacion {
 
 	public static Scanner scn = new Scanner(System.in);
-	
+
 	public static void main(String[] args) {
+		new Principal().iniciar();
+	}
+	
+	public void iniciar() {
 		
 		InetAddress ip;
 		int port;
@@ -52,6 +64,10 @@ public class Principal {
 			
 			client = new Cliente(ip, port);
 			System.out.println("[Conectado] Servidor: " + client.getUsuario().getConexion().getSocket().getInetAddress());
+			
+			// Recojer eventos del cliente
+			//client.setEventos(this);			
+			
 			client.start();
 			
 		} catch (Exception e) {
@@ -59,6 +75,33 @@ public class Principal {
 			System.err.println("Error al conectarse al servidor");
 		}
 
+	}
+
+	@Override
+	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
+		System.out.println("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje());
+	}
+
+	@Override
+	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
+		System.out.println("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje());
+		System.out.println("*Ajuntos*");
+	}
+
+	@Override
+	public void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
+		System.out.println("Usuario " + notificacion.getPerfilUsuario().getNombre() + " conectado.");
+	}
+
+	@Override
+	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
+		System.out.println("Usuario " + notificacion.getPerfilUsuario().getNombre() + " desconectado.");		
 	}
 
 }

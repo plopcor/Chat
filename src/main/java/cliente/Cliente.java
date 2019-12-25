@@ -6,22 +6,26 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import classes.Perfil;
+import classes.notificacion.NotificacionConexion;
+import classes.notificacion.NotificacionDesconexion;
 import classes.peticion.PeticionDatosUsuario;
 import classes.peticion.PeticionMensaje;
+import classes.peticion.PeticionMensajeConAdjuntos;
 import classes.usuario.Usuario;
-import gestores.BORRAR_Gestor;
+import general.EventosAplicacion;
+import gestores.GestorCliente;
 
-public class Cliente{
+public class Cliente implements EventosAplicacion {
 
 	private Usuario usuario;
     private Scanner scn;
-    private static boolean debugMode = false;
-    private BORRAR_Gestor gestor;
+    private static boolean debugMode = true;
+    private GestorCliente gestor;
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         try {
         	// Crear gestor y usuario
-        	gestor = new BORRAR_Gestor();
+        	gestor = new GestorCliente(this);
         	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
         	this.scn = new Scanner(System.in);
         	
@@ -82,14 +86,48 @@ public class Cliente{
     	   	
     }
     
-    // GETTERS & SETTERS
-    public Usuario getUsuario() {
-    	return this.usuario;
-    }
-    
-	public static void log(String texto) {
+    public static void log(String texto) {
 		if(debugMode)
 			System.out.println(texto);
 	}
     
+    
+    // GETTERS & SETTERS
+    public Usuario getUsuario() {
+    	return this.usuario;
+    }
+
+	public GestorCliente getGestor() {
+		return gestor;
+	}
+
+	//
+	// EVENTOS
+	//
+	
+	@Override
+	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
+		log("@ Mensaje de " + usuario.getPerfil().getNombre() + " // " + peticion.getHeader().getPerfilEmisor().getNombre() + " => " + peticion.getMensaje());
+	}
+
+	@Override
+	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
+		log("@ Mensaje con adjuntos => " + peticion.getMensaje() + " => *ADJUNTOS*");
+	}
+
+	@Override
+	public void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
+		log("@ Datos de usuario => " + peticion.getPerfil().getNombre());
+	}
+
+	@Override
+	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
+		log("@ Usuario conectado => " + notificacion.getPerfilUsuario().getNombre());
+	}
+
+	@Override
+	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
+		log("@ Usuario desconectado => " + notificacion.getPerfilUsuario().getNombre());
+	}
+	
 }

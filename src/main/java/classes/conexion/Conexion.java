@@ -1,5 +1,6 @@
 package classes.conexion;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -74,7 +75,7 @@ public class Conexion implements Runnable {
 				System.err.println("Error al leer objeto serializado, clase desconocida");
 				e.printStackTrace();
 		
-			} catch (SocketException e) {
+			} catch (SocketException | EOFException e) {
 				
 				// Si se pierde la conexion, enviar evento
 				salir = true;
@@ -131,7 +132,7 @@ public class Conexion implements Runnable {
 //			System.out.println("[Correcto] Peticion enviada");
 
 		} catch (IOException e) {
-			System.err.println("Error al enviar objeto de tipo \"" + objeto.getClass().getSimpleName()+ "\". Escriptura de objeto fallida");
+			System.err.println("Error al escribir objeto de tipo \"" + objeto.getClass().getSimpleName()+ "\". " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

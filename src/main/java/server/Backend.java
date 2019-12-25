@@ -2,59 +2,63 @@ package server;
 
 import java.util.ArrayList;
 
-import classes.notificacion.Notificacion;
-import classes.notificacion.NotificacionConexion;
-import classes.notificacion.NotificacionDesconexion;
-import classes.peticion.Peticion;
-import classes.peticion.PeticionMensaje;
-import classes.usuario.EventosUsuario;
+import classes.peticion.*;
+import classes.notificacion.*;
 import classes.usuario.Usuario;
-import gestores.Gestor_Servidor;
+import general.EventosAplicacion;
+import gestores.GestorServidor;
 
-public class Backend implements EventosUsuario {
+public class Backend implements EventosAplicacion {
 
 	public Backend backend;
     private ArrayList<Usuario> usuarios;
-    private boolean debugMode = false;
-    private Gestor_Servidor gestor;
+    private boolean debugMode = true;
+    private GestorServidor gestor;
     
+    //
     // CONSTRUCTOR
     public Backend() {
     	
-    	// Crear gestor del servidor
-    	gestor = new Gestor_Servidor();
+    	// Crear gestor del servidor (este objeto sera el event-handler)
+    	gestor = new GestorServidor(this);
     	// Lista de usuarios
     	usuarios = new ArrayList<Usuario>();
     }
     
+    //
     // METODOS
+    //
     
-    public void conectarUsuario(Usuario usuario) throws NullPointerException {
+    public void conectarUsuario(Usuario usuario) {
     	
-    	if(usuario == null)
-    		throw new NullPointerException ("El cliente esta vacio");
+    	if(usuario == null) {
+    		System.err.println("El cliente esta vacio");
+    		return;
+    	}
     	
     	// Si el usuario se conecta correctamente
-    	System.out.println("Cliente conectado: " + usuario.getConexion().getIP());
+    	System.out.println("[INFO] Cliente conectado: " + usuario.getConexion().getIP());
 		
     	// Informar de la conexion a los demas clientes
     	emitirNotificacion(new NotificacionConexion(usuario.getPerfil()));
     	
-    	// Enviar eventos de los usuarios al gestor del servidor
-    	usuario.setEventos(this.gestor); //this);
+    	// Enviar eventos del usuario al gestor del servidor
+    	usuario.setEventos(this.gestor);
     	
 		// Empezar a leer datos
     	usuario.start();
     	
-    	// Añadir a la lista
+    	// AÃ±adir a la lista
     	usuarios.add(usuario);
     }
     
     public void desconectarUsuario(Usuario usuario) {
-    	System.out.println("@ " + usuario.getPerfil().getNombre() + " se ha desconectado.");
-    	if (usuarios.remove(usuario))
-    		this.emitirNotificacion(new NotificacionDesconexion(usuario.getPerfil()));
-    		//emitirPeticion(new PeticionMensaje(usuario.getPerfil().getNombre() + " desconectado"));
+
+    	if (usuarios.remove(usuario)) {
+    		// Enviar notificacion a los demas clientes
+    		NotificacionDesconexion notificacion = new NotificacionDesconexion(usuario.getPerfil());
+    		this.emitirNotificacionRecibida(usuario, notificacion);
+    	}
     }
     
     public void log(String texto) {
@@ -90,39 +94,70 @@ public class Backend implements EventosUsuario {
 			return;
 		
 		for(Usuario u : usuarios)
-			u.getConexion().sendNotificacion(notificacion);
-		
+			u.getConexion().sendNotificacion(notificacion);	
 	}
 	
-	
-	public void procesar(Usuario usuario, Object objRecibido) {
-
-		if(objRecibido == null)
+	public void emitirNotificacionRecibida(Usuario usuario, Notificacion notificacion) {
+		if(notificacion == null)
 			return;
 		
-		// Ver tipo de objeto
-		if(objRecibido instanceof Peticion)
-			
-			
-			server.modulos.ProcesarPeticiones.procesar(usuario, (Peticion) objRecibido);
+		for(Usuario u : usuarios)
+			if(u != usuario)
+				u.getConexion().sendNotificacion(notificacion);
+	}
 
-		else if (objRecibido instanceof Notificacion)
-			cliente.modulos.ProcesarNotificaciones.procesar(usuario, (Notificacion) objRecibido);
-		
-		else
-			System.out.println("No se puede procesar el objeto recibido, tipo de objeto desconocido");
-	}
+	//
+	// GETTERS & SETTERS
+	//
 	
+	public GestorServidor getGestor() {
+		return gestor;
+	}
+
+	//
 	// EVENTOS
-	public void onUsuarioObjetoRecibido(Usuario usuario, Object objRecibido) {
-		Backend.log("@ Objeto recibido de " + usuario.getPerfil().getNombre() + " => " + objRecibido.getClass().getSimpleName());
-		procesar(usuario, objRecibido);
-	}
+	//
 	
-	public void onUsuarioDesconectado(Usuario usuario) {
+	@Override
+	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
+		log("@ Mensaje de " + usuario.getPerfil().getNombre() + " => " + peticion.getMensaje());
+
+		// Re-enviar peticion a los demas clientes
+		emitirPeticionRecibida(usuario, peticion);
+	}
+
+	@Override
+	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
+		log("@ Mensaje de " + usuario.getPerfil().getNombre()+ " [" + usuario.getConexion().getIP() + "] => " + peticion.getMensaje() + " ==> *ADJUNTOS*");		
+
+		// Re-enviar peticion a los demas clientes
+		emitirPeticionRecibida(usuario, peticion);
+	}
+
+	@Override
+	public void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
+		log("@ Datos de usuario de " + usuario.getPerfil().getNombre() + "[" + usuario.getConexion().getIP() +  "] => " + peticion.getPerfil().getNombre());
+		
+		// Actualizar datos del usuario
+		usuario.getPerfil().setNombre(peticion.getPerfil().getNombre());
+		
+		// Enviar notificacion a los demas clientes
+		NotificacionPerfilActualizado notificacion = new NotificacionPerfilActualizado(usuario.getPerfil(), peticion.getPerfil());
+		this.emitirNotificacionRecibida(usuario, notificacion);
+	}
+
+	@Override
+	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
+		log("@ Notificacion conexion de " + usuario.getPerfil().getNombre() + " [" + usuario.getConexion().getIP() + "]");
+		this.emitirNotificacionRecibida(usuario, notificacion);
+	}
+
+	@Override
+	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
+		log("@ Notificacion desconexion de " + usuario.getPerfil().getNombre() + " [" + usuario.getConexion().getIP() + "]");
+		
+		System.out.println("[INFO] " + usuario.getPerfil().getNombre() + " se ha desconectado.");
 		desconectarUsuario(usuario);
 	}
-	
-	// ON EVENTOS
-	
+
 }

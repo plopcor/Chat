@@ -6,18 +6,20 @@ import classes.notificacion.NotificacionDesconexion;
 import classes.usuario.Usuario;
 import cliente.Cliente;
 
-public class GestorNotificaciones {
+public class SubGestorNotificaciones {
 
-	private EventosGestor eventos;
+	private EventosSubGestorNotificaciones eventos;
 
 	//
 	// CONSTRUCTOR
 	//
 
-	public GestorNotificaciones() {
+	private SubGestorNotificaciones() {
+		super();
 	}
 
-	public GestorNotificaciones(EventosGestor eventos) {
+	public SubGestorNotificaciones(EventosSubGestorNotificaciones eventos) {
+		this();
 		this.eventos = eventos;
 	}
 
@@ -47,13 +49,13 @@ public class GestorNotificaciones {
 	//
 
 	private void procesarNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
-		// DEBUG
-		Cliente.log("# RECIBIDO => Conexion");
+		if(eventos != null)
+			eventos.onProcesadoNotificacionConexion(usuario, notificacion);
 	}
 
 	private void procesarNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
-		// DEBUG
-		Cliente.log("# RECIBIDO => Desconexion");
+		if(eventos != null)
+			eventos.onProcesadoNotificacionDesconexion(usuario, notificacion);
 	}
 	
 	
@@ -61,7 +63,7 @@ public class GestorNotificaciones {
 	// SETTERS & GETTERS
 	//
 	
-	public void setEventos(EventosGestor eventos) {
+	public void setEventos(EventosSubGestorNotificaciones eventos) {
 		this.eventos = eventos;
 	}
 
