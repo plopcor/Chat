@@ -6,7 +6,7 @@ import classes.usuario.EventosUsuario;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
 
-public class GestorServidor implements EventosUsuario, EventosSubGestorPeticiones, EventosSubGestorNotificaciones {
+public class GestorGeneral implements EventosUsuario, EventosSubGestorPeticiones, EventosSubGestorNotificaciones {
 
 	private SubGestorNotificaciones gestorNotificaciones;
 	private SubGestorPeticiones gestorPeticiones;
@@ -14,14 +14,14 @@ public class GestorServidor implements EventosUsuario, EventosSubGestorPeticione
 	
 	// CONSTRUCTOR
 	
-	public GestorServidor() {
+	public GestorGeneral() {
 		
 		// Crear sub-gestores y poner este objeto como event-handler 
 		this.gestorNotificaciones = new SubGestorNotificaciones(this);
 		this.gestorPeticiones = new SubGestorPeticiones(this);
 	}
 	
-	public GestorServidor(EventosAplicacion eventos) {
+	public GestorGeneral(EventosAplicacion eventos) {
 		this();
 		this.eventos = eventos;
 	}

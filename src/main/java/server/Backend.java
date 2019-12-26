@@ -6,21 +6,21 @@ import classes.peticion.*;
 import classes.notificacion.*;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
-import gestores.GestorServidor;
+import gestores.GestorGeneral;
 
 public class Backend implements EventosAplicacion {
 
 	public Backend backend;
     private ArrayList<Usuario> usuarios;
     private boolean debugMode = true;
-    private GestorServidor gestor;
+    private GestorGeneral gestor;
     
     //
     // CONSTRUCTOR
     public Backend() {
     	
     	// Crear gestor del servidor (este objeto sera el event-handler)
-    	gestor = new GestorServidor(this);
+    	gestor = new GestorGeneral(this);
     	// Lista de usuarios
     	usuarios = new ArrayList<Usuario>();
     }
@@ -110,7 +110,7 @@ public class Backend implements EventosAplicacion {
 	// GETTERS & SETTERS
 	//
 	
-	public GestorServidor getGestor() {
+	public GestorGeneral getGestor() {
 		return gestor;
 	}
 

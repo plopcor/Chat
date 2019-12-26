@@ -10,19 +10,19 @@ import classes.notificacion.*;
 import classes.peticion.*;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
-import gestores.GestorCliente;
+import gestores.GestorGeneral;
 
 public class Cliente implements EventosAplicacion {
 
 	private Usuario usuario;
     private Scanner scn;
     private static boolean debugMode = true;
-    private GestorCliente gestor;
+    private GestorGeneral gestor;
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         try {
         	// Crear gestor y usuario
-        	gestor = new GestorCliente(this);
+        	gestor = new GestorGeneral(this);
         	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
         	this.scn = new Scanner(System.in);
         	
@@ -94,7 +94,7 @@ public class Cliente implements EventosAplicacion {
     	return this.usuario;
     }
 
-	public GestorCliente getGestor() {
+	public GestorGeneral getGestor() {
 		return gestor;
 	}
 
