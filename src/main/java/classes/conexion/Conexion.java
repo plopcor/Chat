@@ -68,7 +68,7 @@ public class Conexion implements Runnable {
 				objRecibido = objInputStream.readObject();
 				
 				// Accionar evento
-				if(eventos != null)
+				if(eventos != null && objRecibido != null)
 					this.eventos.onConexionObjetoRecibido(objRecibido);
 				
 			} catch (ClassNotFoundException e) {

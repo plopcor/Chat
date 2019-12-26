@@ -1,10 +1,7 @@
 package gestores;
 
-import classes.notificacion.Notificacion;
-import classes.notificacion.NotificacionConexion;
-import classes.notificacion.NotificacionDesconexion;
+import classes.notificacion.*;
 import classes.usuario.Usuario;
-import cliente.Cliente;
 
 public class SubGestorNotificaciones {
 
@@ -28,15 +25,16 @@ public class SubGestorNotificaciones {
 	//
 
 	public void procesar(Usuario usuario, Notificacion notificacion) {
-
-		Cliente.log("@ Recibido notificacion de \"" + usuario.getPerfil().getNombre() + "\"");
-
+		
 		if (notificacion instanceof NotificacionConexion)
 			procesarNotificacionConexion(usuario, (NotificacionConexion) notificacion);
 
 		else if (notificacion instanceof NotificacionDesconexion)
 			procesarNotificacionDesconexion(usuario, (NotificacionDesconexion) notificacion);
 
+		else if (notificacion instanceof NotificacionPerfilActualizado)
+			procesarNotificacionPerfilActualizado(usuario, (NotificacionPerfilActualizado) notificacion);
+		
 		else {
 			System.err.println("[INFO] No se ha podido procesar la notificacion");
 			System.err.println(
@@ -58,6 +56,10 @@ public class SubGestorNotificaciones {
 			eventos.onProcesadoNotificacionDesconexion(usuario, notificacion);
 	}
 	
+	private void procesarNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
+		if(eventos != null)
+			eventos.onProcesadoNotificacionPerfilActualizado(usuario, notificacion);
+	}
 	
 	//
 	// SETTERS & GETTERS

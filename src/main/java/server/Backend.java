@@ -120,41 +120,49 @@ public class Backend implements EventosAplicacion {
 	
 	@Override
 	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
-		log("@ Mensaje de " + usuario.getPerfil().getNombre() + " => " + peticion.getMensaje());
+		log("[MENSAJE] " + usuario.getPerfil().getNombre() + " (" + usuario.getConexion().getIP() + ") => " + peticion.getMensaje());
 
+		// Poner emisor
+		peticion.getHeader().setPerfilEmisor(usuario.getPerfil());
+		
 		// Re-enviar peticion a los demas clientes
 		emitirPeticionRecibida(usuario, peticion);
 	}
 
 	@Override
 	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
-		log("@ Mensaje de " + usuario.getPerfil().getNombre()+ " [" + usuario.getConexion().getIP() + "] => " + peticion.getMensaje() + " ==> *ADJUNTOS*");		
+		log("@ [MENSAJE][ADJUNTOS] " + usuario.getPerfil().getNombre() + " (" + usuario.getConexion().getIP() + ") => " + peticion.getMensaje() + " ==> *ADJUNTOS*");		
 
+		// Poner emisor
+		peticion.getHeader().setPerfilEmisor(usuario.getPerfil());
+		
 		// Re-enviar peticion a los demas clientes
 		emitirPeticionRecibida(usuario, peticion);
 	}
 
 	@Override
 	public void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
-		log("@ Datos de usuario de " + usuario.getPerfil().getNombre() + "[" + usuario.getConexion().getIP() +  "] => " + peticion.getPerfil().getNombre());
+		log("@ [DATOS USUARIO] " + usuario.getPerfil().getNombre() + " (" + usuario.getConexion().getIP() +  ") => " + peticion.getPerfil().getNombre());
+
+		// Crear notificacion con datos antiguos y nuevos
+		NotificacionPerfilActualizado notificacion = new NotificacionPerfilActualizado(usuario.getPerfil(), peticion.getPerfil());
 		
 		// Actualizar datos del usuario
-		usuario.getPerfil().setNombre(peticion.getPerfil().getNombre());
+		usuario.setPerfil(peticion.getPerfil());
 		
 		// Enviar notificacion a los demas clientes
-		NotificacionPerfilActualizado notificacion = new NotificacionPerfilActualizado(usuario.getPerfil(), peticion.getPerfil());
 		this.emitirNotificacionRecibida(usuario, notificacion);
 	}
 
 	@Override
 	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
-		log("@ Notificacion conexion de " + usuario.getPerfil().getNombre() + " [" + usuario.getConexion().getIP() + "]");
+		log("@ [CONEXION] " + usuario.getPerfil().getNombre() + " (" + usuario.getConexion().getIP() + ")");
 		this.emitirNotificacionRecibida(usuario, notificacion);
 	}
 
 	@Override
 	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
-		log("@ Notificacion desconexion de " + usuario.getPerfil().getNombre() + " [" + usuario.getConexion().getIP() + "]");
+		log("@ [DESCONEXION] " + usuario.getPerfil().getNombre() + " (" + usuario.getConexion().getIP() + ")");
 		
 		System.out.println("[INFO] " + usuario.getPerfil().getNombre() + " se ha desconectado.");
 		desconectarUsuario(usuario);
@@ -162,7 +170,7 @@ public class Backend implements EventosAplicacion {
 
 	@Override
 	public void onNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
-		log("@ [ERROR - NO TENDRIA QUE RECIBIR NINGUNA] Notificacion perfil actualizado de " + usuario.getPerfil().getNombre() + " [" + usuario.getConexion().getIP() + "]");
+		log("@ [ERROR] NO TENDRIA QUE RECIBIR NINGUNA // Notificacion perfil actualizado de " + usuario.getPerfil().getNombre() + " (" + usuario.getConexion().getIP() + ")");
 	}
 
 }

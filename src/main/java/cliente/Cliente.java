@@ -104,33 +104,32 @@ public class Cliente implements EventosAplicacion {
 	
 	@Override
 	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
-		log("@ Mensaje de " + usuario.getPerfil().getNombre() + " // " + peticion.getHeader().getPerfilEmisor().getNombre() + " => " + peticion.getMensaje());
+		log("@ [MENSAJE] " + peticion.getHeader().getPerfilEmisor().getNombre() + " => " + peticion.getMensaje());
 	}
 
 	@Override
 	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
-		log("@ Mensaje con adjuntos => " + peticion.getMensaje() + " => *ADJUNTOS*");
+		log("@ [MENSAJE][ADJUNTOS] " + peticion.getHeader().getPerfilEmisor().getNombre() + " => " + peticion.getMensaje() + " /// *ADJUNTOS*");
 	}
 
 	@Override
 	public void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
-		log("@ Datos de usuario => " + peticion.getPerfil().getNombre());
+		log("@ [DATOS USUARIO] " + peticion.getHeader().getPerfilEmisor().getNombre() + "=> " + peticion.getPerfil().getNombre());
 	}
 
 	@Override
 	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
-		log("@ Usuario conectado => " + notificacion.getPerfilUsuario().getNombre());
+		log("@ [CONECTADO] => " + notificacion.getPerfilUsuario().getNombre());
 	}
 
 	@Override
 	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
-		log("@ Usuario desconectado => " + notificacion.getPerfilUsuario().getNombre());
+		log("@ [DESCONECTADO] => " + notificacion.getPerfilUsuario().getNombre());
 	}
 
 	@Override
 	public void onNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
-		log("@ Usuario ha actualizado perfil => \n" + notificacion.toString());
-		
+		log("@ [PERFIL ACTUALIZADO] => " + notificacion.toString());
 	}
 	
 }
