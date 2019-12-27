@@ -10,7 +10,7 @@
    <center>
       <Pane prefHeight="837.0" prefWidth="542.0" BorderPane.alignment="CENTER">
          <children>
-            <TextArea fx:id="txtChat" layoutX="19.0" layoutY="14.0" prefHeight="360.0" prefWidth="498.0" />
+            <TextArea fx:id="txtChat" editable="false" layoutX="19.0" layoutY="14.0" prefHeight="360.0" prefWidth="498.0" wrapText="true" />
          </children>
       </Pane>
    </center>
@@ -18,7 +18,7 @@
       <Pane prefHeight="53.0" prefWidth="536.0" BorderPane.alignment="CENTER">
          <children>
             <TextField fx:id="inputMensaje" layoutX="94.0" layoutY="14.0" onAction="#inputMensajeEnter" prefHeight="26.0" prefWidth="349.0" />
-            <Button fx:id="btnEnviar" layoutX="460.0" layoutY="14.0" mnemonicParsing="false" text="Button" />
+            <Button fx:id="btnEnviar" layoutX="460.0" layoutY="14.0" mnemonicParsing="false" text="Enviar" />
          </children>
       </Pane>
    </bottom>

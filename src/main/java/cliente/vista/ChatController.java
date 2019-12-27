@@ -40,6 +40,8 @@ public class ChatController implements Initializable, EventosAplicacion {
 		if(msg.isEmpty())
 			return;
 		
+		txtChat.appendText("[" + cliente.getUsuario().getPerfil().getNombre() + "]: " + msg + "\n");
+		
 		cliente.getUsuario().getConexion().sendPeticion(new PeticionMensaje(msg));
 	}
 	
@@ -47,9 +49,6 @@ public class ChatController implements Initializable, EventosAplicacion {
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		cliente = Launcher.getAplicacion().getCliente();
-		
-		if(cliente == null)
-			System.out.println("ES NULOOOOOOOOOOOOO");
 		
 		if(cliente == null) {
 			if(!Launcher.getAplicacion().setEscena(EnumEscenas.CONEXION))
@@ -60,7 +59,9 @@ public class ChatController implements Initializable, EventosAplicacion {
 		cliente.setEventos(this);
 		cliente.start();
 		
-		cliente.enviarDatosUsuario();		
+		cliente.enviarDatosUsuario();
+		
+		inputMensaje.requestFocus();
 	}
 
 	
@@ -70,13 +71,21 @@ public class ChatController implements Initializable, EventosAplicacion {
 	
 	@Override
 	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
-		this.txtChat.appendText("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje());
+		this.txtChat.appendText("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje() + "\n");
 	}
 
 	@Override
 	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
-		// TODO Auto-generated method stub
-		
+		this.txtChat.appendText("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje() + "\n");
+
+		// Mostrar informacion de los adjuntos
+		int max = 5, i = 0;
+		for(classes.Fichero f : peticion.getFicheros()) {
+			if(i == max)
+				return;
+			System.out.println("- " + f.getFichero().getName() + " (Size: " + (f.getBytesFichero().length / 1024) + " kb)");
+			i++;
+		}
 	}
 
 	@Override
@@ -87,19 +96,18 @@ public class ChatController implements Initializable, EventosAplicacion {
 
 	@Override
 	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
-		txtChat.appendText("Usuario " + notificacion.getPerfilUsuario().getNombre() + " conectado.");
-		
+		txtChat.appendText(notificacion.getPerfilUsuario().getNombre() + " se ha conectado.\n");
 	}
 
 	@Override
 	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
-		txtChat.appendText("Usuario " + notificacion.getPerfilUsuario().getNombre() + " desconectado.");
+		txtChat.appendText(notificacion.getPerfilUsuario().getNombre() + " se ha desconectado.\n");
 	}
 
 	@Override
 	public void onNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
-		// TODO Auto-generated method stub
-		
+		txtChat.appendText(notificacion.getPerfilNuevo().getNombre() + " ha actualizado su perfil\n");
+		txtChat.appendText(notificacion.toString());
 	}
 
 	
