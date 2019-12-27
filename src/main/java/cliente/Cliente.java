@@ -16,11 +16,33 @@ public class Cliente implements EventosAplicacion {
 
 	private Usuario usuario;
     private Scanner scn;
-    private static boolean debugMode = true;
+    private static boolean debugMode = false;
     private GestorGeneral gestor;
+    private EventosAplicacion eventos;
     
-    public Cliente (InetAddress serverAddress, int serverPort) {
+//    public Cliente (InetAddress serverAddress, int serverPort) {
+//        try {
+//        	// Crear gestor y usuario
+//        	gestor = new GestorGeneral(this);
+//        	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
+//        	this.scn = new Scanner(System.in);
+//        	
+//        	// Enviar eventos del usuario al gestor
+//        	this.usuario.setEventos(gestor);
+//        	
+//        	enviarDatosUsuario();
+//        	
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}       
+//    }
+    
+    public Cliente (InetAddress serverAddress, int serverPort, EventosAplicacion eventos) {
         try {
+        	
+        	// Asignar handler de los eventos
+        	this.eventos = eventos;
+
         	// Crear gestor y usuario
         	gestor = new GestorGeneral(this);
         	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
@@ -28,8 +50,6 @@ public class Cliente implements EventosAplicacion {
         	
         	// Enviar eventos del usuario al gestor
         	this.usuario.setEventos(gestor);
-        	
-        	enviarDatosUsuario();
         	
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -40,6 +60,12 @@ public class Cliente implements EventosAplicacion {
     	
     	// Empezar lectura para datos recibidos
     	this.usuario.start();
+    	
+    	// Si se controla desde fuera, se enviaran los datos desde fuera (no leera datos de la consola)
+    	if(eventos != null)
+    		return;
+    	
+    	enviarDatosUsuario();
     	
     	String input;
     	PeticionMensaje petMsg;
@@ -97,6 +123,10 @@ public class Cliente implements EventosAplicacion {
 	public GestorGeneral getGestor() {
 		return gestor;
 	}
+	
+	public void setEventos(EventosAplicacion eventos) {
+		this.eventos = eventos;
+	}
 
 	//
 	// EVENTOS
@@ -105,11 +135,25 @@ public class Cliente implements EventosAplicacion {
 	@Override
 	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {
 		log("@ [MENSAJE] " + peticion.getHeader().getPerfilEmisor().getNombre() + " => " + peticion.getMensaje());
+
+		// Si tiene handler, re-enviar al handler. Si no, mostrar aqui
+    	if(eventos != null)
+    		eventos.onMensaje(usuario, peticion);
+    	else
+    		System.out.println(peticion.getHeader().getPerfilEmisor().getNombre() + ": " + peticion.getMensaje());
+		
 	}
 
 	@Override
 	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
 		log("@ [MENSAJE][ADJUNTOS] " + peticion.getHeader().getPerfilEmisor().getNombre() + " => " + peticion.getMensaje() + " /// *ADJUNTOS*");
+		
+		// Si tiene handler, re-enviar al handler. Si no, mostrar aqui
+    	if(eventos != null)
+    		eventos.onMensajeConAdjuntos(usuario, peticion);
+    	else
+    		System.out.println(peticion.getHeader().getPerfilEmisor().getNombre() + ": " + peticion.getMensaje() + " /// [Adjuntos] ");
+		
 	}
 
 	@Override
@@ -120,16 +164,31 @@ public class Cliente implements EventosAplicacion {
 	@Override
 	public void onNotificacionConexion(Usuario usuario, NotificacionConexion notificacion) {
 		log("@ [CONECTADO] => " + notificacion.getPerfilUsuario().getNombre());
+
+		if(eventos != null)
+			eventos.onNotificacionConexion(usuario, notificacion);
+		else
+			System.out.println("[Conectado] " + notificacion.getPerfilUsuario().getNombre());
 	}
 
 	@Override
 	public void onNotificacionDesconexion(Usuario usuario, NotificacionDesconexion notificacion) {
 		log("@ [DESCONECTADO] => " + notificacion.getPerfilUsuario().getNombre());
+		
+		if(eventos != null)
+			eventos.onNotificacionDesconexion(usuario, notificacion);
+		else
+			System.out.println("[Desconectado] " + notificacion.getPerfilUsuario().getNombre());
 	}
 
 	@Override
 	public void onNotificacionPerfilActualizado(Usuario usuario, NotificacionPerfilActualizado notificacion) {
 		log("@ [PERFIL ACTUALIZADO] => " + notificacion.toString());
+		
+		if(eventos != null)
+			eventos.onNotificacionPerfilActualizado(usuario, notificacion);
+		else
+			System.out.println("[Perfil] " + notificacion.getPerfilAntiguo().getNombre() + " ha actualizado su perfil a " + notificacion.getPerfilNuevo().getNombre());		
 	}
 	
 }

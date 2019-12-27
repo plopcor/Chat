@@ -63,7 +63,7 @@ public class Principal implements EventosAplicacion {
 		Cliente client = null;
 		try {
 			
-			client = new Cliente(ip, port);
+			client = new Cliente(ip, port, null);
 			System.out.println("[Conectado] Servidor: " + client.getUsuario().getConexion().getSocket().getInetAddress());
 			
 			// Recojer eventos del cliente
