@@ -2,8 +2,11 @@ package cliente;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Scanner;
+
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 
 import classes.Perfil;
 import classes.notificacion.*;
@@ -19,33 +22,29 @@ public class Cliente implements EventosAplicacion {
     private static boolean debugMode = false;
     private GestorGeneral gestor;
     private EventosAplicacion eventos;
+     
+    // SSL Key
+ 	private final String SSL_KEY = getClass().getResource("/cliente/ssl_rsa_cert.p12").getPath();
+ 	private final String SSL_KEY_PASSWORD = "123456";
     
-//    public Cliente (InetAddress serverAddress, int serverPort) {
-//        try {
-//        	// Crear gestor y usuario
-//        	gestor = new GestorGeneral(this);
-//        	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
-//        	this.scn = new Scanner(System.in);
-//        	
-//        	// Enviar eventos del usuario al gestor
-//        	this.usuario.setEventos(gestor);
-//        	
-//        	enviarDatosUsuario();
-//        	
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}       
-//    }
-    
-    public Cliente (InetAddress serverAddress, int serverPort, EventosAplicacion eventos) {
-        try {
-        	
-        	// Asignar handler de los eventos
-        	this.eventos = eventos;
+    public Cliente (InetAddress serverAddress, int serverPort) {
+        
+    	// Set SSL key
+    	System.setProperty("javax.net.ssl.trustStore", SSL_KEY);
+		System.setProperty("javax.net.ssl.trustStorePassword", SSL_KEY_PASSWORD);
+		System.setProperty("javax.net.ssl.keyStore", SSL_KEY);
+		System.setProperty("javax.net.ssl.keyStorePassword", SSL_KEY_PASSWORD);
+    	
+    	try {
 
-        	// Crear gestor y usuario
-        	gestor = new GestorGeneral(this);
-        	this.usuario = new Usuario(new Socket(serverAddress, serverPort));
+    		// Crear SSL Socket y habilitar protocolos y cipher suites
+        	SSLSocket socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket(serverAddress, serverPort);
+        	socket.setEnabledProtocols(new String[] {"TLSv1.2"});
+        	socket.setEnabledCipherSuites(new String[] {"TLS_RSA_WITH_AES_256_GCM_SHA384"});
+        	
+        	// Crear usuario, conexion y gestor
+        	this.usuario = new Usuario(socket);  //new Usuario(new Socket(serverAddress, serverPort));
+        	this.gestor = new GestorGeneral(this);
         	this.scn = new Scanner(System.in);
         	
         	// Enviar eventos del usuario al gestor

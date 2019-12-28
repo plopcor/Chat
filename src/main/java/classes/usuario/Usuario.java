@@ -2,6 +2,8 @@ package classes.usuario;
 
 import java.net.Socket;
 
+import javax.net.ssl.SSLSocket;
+
 import classes.Perfil;
 import classes.conexion.Conexion;
 import classes.conexion.EventosConexion;
@@ -12,7 +14,7 @@ public class Usuario implements EventosConexion {
 	private Conexion conexion;
 	private EventosUsuario eventos;
 	
-	public Usuario(Socket socketCliente) {
+	public Usuario(SSLSocket socketCliente) {
 
 		this.perfil = new Perfil("Anonimo");
 		this.conexion = new Conexion(socketCliente);

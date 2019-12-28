@@ -16,6 +16,8 @@ public class Principal implements EventosAplicacion {
 
 	public static Scanner scn = new Scanner(System.in);
 
+
+	
 	public static void main(String[] args) {
 		new Principal().iniciar();
 	}
@@ -42,8 +44,13 @@ public class Principal implements EventosAplicacion {
 		// Iniciar servidor
 		Servidor srv = new Servidor(null, port);
         System.out.println("Servidor iniciado");
-        System.out.println("- Host: " + srv.getSocketAddress().getHostAddress());
-        System.out.println("- Port: " + srv.getPort());
+        try {
+            System.out.println("- Host: " + srv.getSocketAddress().getHostAddress());        	
+            System.out.println("- Port: " + srv.getPort());
+             
+        } catch (Exception e) {
+        	System.out.println("Error: " + e.getMessage());
+        }
         
         // Recojer eventos del backend
         //srv.getBackend().setEventos(this);

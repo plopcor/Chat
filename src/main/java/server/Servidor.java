@@ -1,29 +1,47 @@
 package server;
 
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 
 import classes.usuario.Usuario;
 
 public class Servidor {
 	
-    private ServerSocket server;
+    private SSLServerSocket server;
     private Backend backend;
+    
+    // SSL Key
+ 	private final String SSL_KEY = getClass().getResource("/servidor/ssl_rsa_cert.p12").getPath();
+ 	private final String SSL_KEY_PASSWORD = "123456";
     
     public Servidor(String ipAddress, int port) {
     	
+    	// Certificado, SSL Key
+    	System.setProperty("javax.net.ssl.trustStore", SSL_KEY);
+		System.setProperty("javax.net.ssl.trustStorePassword", SSL_KEY_PASSWORD);
+		System.setProperty("javax.net.ssl.keyStore", SSL_KEY);
+		System.setProperty("javax.net.ssl.keyStorePassword", SSL_KEY_PASSWORD);
+		
+    	
     	try {
-    		if (ipAddress != null && !ipAddress.isEmpty()) 
-    			this.server = new ServerSocket(port, 1, InetAddress.getByName(ipAddress));
-    		else
-    			this.server = new ServerSocket(port, 32, Inet4Address.getLocalHost());
-    			// this.server = new ServerSocket(port, 1, InetAddress.getLocalHost());
+    		
+    		// Creat SSLServerSocket
+            SSLServerSocket socket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port); //, 0, InetAddress.getLocalHost());
+            socket.setEnabledProtocols(new String[] {"TLSv1.2"});
+            socket.setEnabledCipherSuites(new String[] {"TLS_RSA_WITH_AES_256_GCM_SHA384", "TLS_RSA_WITH_AES_256_CBC_SHA256"});  //TLS_RSA_WITH_AES_256_CBC_SHA //, "TLS_AES_128_GCM_SHA256"});
+            
+            this.server = socket;
+			
+    	} catch (IllegalArgumentException e) {
+    		System.err.println("Error, el puerto ha de estar entre 0 y 65535");
+    		e.printStackTrace();
     		
     	} catch (Exception e) {
-    		System.err.println("Error al crear el servidor " + e.getMessage());
+    		System.err.println("Error al crear el servidor: " + e.getMessage());
     	}
     	
     	backend = new Backend();
@@ -32,19 +50,19 @@ public class Servidor {
     
     public void listen() {
     	
-        Socket cliente = null;
+        SSLSocket cliente = null;
         
         do {
         
 			try {
 				
 				// Aceptar conexion del cliente
-				cliente = this.server.accept();
+				cliente = (SSLSocket) this.server.accept();
 				
 				// Crear nuevo cliente conectado
 				Usuario usuarioConectado = new Usuario(cliente);
 				
-				// A�adir a la lista i empezar a leer datos
+				// Añadir a la lista i empezar a leer datos
 				backend.conectarUsuario(usuarioConectado);
 				
 			} catch (IOException e) {

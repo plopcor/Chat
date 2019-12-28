@@ -2,6 +2,7 @@ package cliente;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -63,7 +64,7 @@ public class Principal implements EventosAplicacion {
 		Cliente client = null;
 		try {
 			
-			client = new Cliente(ip, port, null);
+			client = new Cliente(ip, port);
 			System.out.println("[Conectado] Servidor: " + client.getUsuario().getConexion().getSocket().getInetAddress());
 			
 			// Recojer eventos del cliente

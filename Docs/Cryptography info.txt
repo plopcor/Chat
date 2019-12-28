@@ -1,0 +1,36 @@
+
+### Constructors and client/server code snippets
+https://stackoverflow.com/questions/4463474/client-connecting-to-an-ssl-server-with-self-signed-certificates
+
+### ERROR: Cipher suite not supported
+# Changed cipher suite to one of the suites in the answer
+https://stackoverflow.com/questions/47840013/how-to-enable-and-use-cipher-suite-tls-rsa-with-aes-128-cbc-sha-in-java-v1-8#comment82644685_47840013
+
+### Java 8 - Available CipherSuits
+https://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html#SunJSSEProvider
+
+### Keytool - Generate keys
+
+# Comando para generar claves:
+keytool -genkeypair -alias <NOMBRE> -keyalg RSA -sigalg <SignatureAlgorithm> -keysize <size> -keystore <key_filename> -storetype pkcs12 -v -storepass <password> -validity <dias> -ext san=ip:127.0.0.1
+# Ejemplo:
+// keytool -genkeypair -alias client -keyalg RSA -sigalg  SHA384withECDSA -keysize 256 -keystore ssl_cert.p12 -storetype pkcs12 -v -storepass 123456 -validity 10000 -ext san=ip:127.0.0.1
+keytool -genkeypair -alias Servidor -keyalg RSA -sigalg SHA384withRSA -keysize 2048 -keystore ssl_rsa_cert.p12 -storetype pkcs12 -v -storepass 123456 -validity 10000 -ext san=ip:127.0.0.1
+
+# Arguments
+http://tutorials.jenkov.com/java-cryptography/keytool.html#keytool-arguments
+
+# Key & Signature algorithms names list
+https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#Signature
+
+# Webs used to find that page
+https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html#AppA
+https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html#keytool_option_genkeypair
+=> Going to "For a full list of -keyalg and -sigalg arguments, see..."
+
+# Algorithms for OpenSSL
+https://www.namecheap.com/support/knowledgebase/article.aspx/9952/67/supported-key-sizes-and-signature-algorithms-in-csrs
+
+@@@@@@@@@@@@
+ # Descomentar linea en "java.security" => /usr/lib/jvm/java-8-oracle/jre/lib/security/
+=> crypto.policy=unlimited

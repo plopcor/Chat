@@ -11,12 +11,14 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.net.ssl.SSLSocket;
+
 import classes.notificacion.Notificacion;
 import classes.peticion.Peticion;
 
 public class Conexion implements Runnable {
 
-	private Socket socket;
+	private SSLSocket socket;
 	private InputStream inputStream;
 	private OutputStream outputStream;
 	
@@ -30,7 +32,8 @@ public class Conexion implements Runnable {
 	private EventosConexion eventos;
 	
 	// CONSTRUCTOR
-	public Conexion(Socket socket) {
+	public Conexion(SSLSocket socket) {
+		
 		this.socket = socket;
 		
 		try {
@@ -73,7 +76,7 @@ public class Conexion implements Runnable {
 				
 			} catch (ClassNotFoundException e) {
 				System.err.println("Error al leer objeto serializado, clase desconocida");
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 		
 			} catch (SocketException | EOFException e) {
 				
@@ -85,8 +88,7 @@ public class Conexion implements Runnable {
 					this.eventos.onDesconectado();
 				
 			} catch (IOException e) {
-				System.err.println("Error al leer objeto serializado");
-				e.printStackTrace();
+				System.err.println("Error al leer objeto serializado. " + e.getMessage());
 				salir = true;
 			}
 		

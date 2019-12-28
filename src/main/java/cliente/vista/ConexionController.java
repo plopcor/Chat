@@ -62,7 +62,7 @@ public class ConexionController {
 		}
 		
 		// Crear conexion
-		Launcher.getAplicacion().setCliente(new Cliente(ip, port, null));
+		Launcher.getAplicacion().setCliente(new Cliente(ip, port));
 		
 		// Mostrar chat
 		Launcher.getAplicacion().setEscena(EnumEscenas.CHAT);
