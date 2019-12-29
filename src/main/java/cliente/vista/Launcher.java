@@ -33,12 +33,14 @@ public class Launcher extends Application {
 		// Cargar rutas de las escenas
 		escenasURL.put(EnumEscenas.CONEXION, getClass().getResource("/cliente/vista/ConexionView.fxml"));
 		escenasURL.put(EnumEscenas.CHAT, getClass().getResource("/cliente/vista/ChatView.fxml"));
-		
+		escenasURL.put(EnumEscenas.CHAT_Notepad, getClass().getResource("/cliente/vista/chats/EstiloNotepad.fxml"));
 		// Cerrar aplicacion al cerrar GUI
 		stage.setOnCloseRequest(e -> System.exit(0));
 		
 		// Cargar primera escena
-		setEscena(EnumEscenas.CONEXION);
+		
+		setEscena(EnumEscenas.CHAT_Notepad);
+		//setEscena(EnumEscenas.CONEXION);
 		stage.setTitle("Chat - Conexion");
 		
 		stage.show();
