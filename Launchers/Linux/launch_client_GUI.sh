@@ -1,2 +1,2 @@
-cd target/classes
+cd ../../target/classes
 java cliente.vista.Launcher
