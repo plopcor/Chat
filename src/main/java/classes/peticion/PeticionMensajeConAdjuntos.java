@@ -21,8 +21,7 @@ public class PeticionMensajeConAdjuntos extends PeticionMensaje {
 		this.ficheros = ficheros;
 	}
 	
-	
-	public boolean añadirFichero(Fichero fichero) {
+	public boolean anadirFichero(Fichero fichero) {
 		return this.ficheros.add(fichero);
 	}	
 
