@@ -30,6 +30,7 @@ public class EstiloNotepadController implements Initializable, EventosAplicacion
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		Launcher.getAplicacion().getStage().setTitle("Bloc de notas");
 		return;
 //		cliente = Launcher.getAplicacion().getCliente();
 //		
@@ -81,7 +82,7 @@ public class EstiloNotepadController implements Initializable, EventosAplicacion
 			}
 			
 			// Enviar mensaje
-			cliente.getUsuario().getConexion().sendPeticion(new PeticionMensaje(msg));
+			//cliente.getUsuario().getConexion().sendPeticion(new PeticionMensaje(msg));
 			
 	    }
 		

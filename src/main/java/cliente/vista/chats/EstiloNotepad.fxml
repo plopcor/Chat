@@ -74,7 +74,7 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-            <TextArea fx:id="textEditor" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#textEditorOnKeyPressed" prefHeight="371.0" prefWidth="640.0" style="-fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;" />
+            <TextArea fx:id="textEditor" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#textEditorOnKeyPressed" prefHeight="485.0" prefWidth="774.0" style="-fx-border-radius: 0 0 0 0; -fx-background-radius: 0 0 0 0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       </children>
     </AnchorPane>
   </children>
