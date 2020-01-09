@@ -52,7 +52,7 @@ public class EstiloNotepadController implements Initializable, EventosAplicacion
 	
 		// https://stackoverflow.com/a/19066976
 		
-		// Alt+Enter => Enviar mensaje
+		// Ctrl+Enter => Enviar mensaje
 		if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
 			
 			// Ver si hay texto seleccionado o es la linea escrita
@@ -66,7 +66,7 @@ public class EstiloNotepadController implements Initializable, EventosAplicacion
 			
 			} else {
 
-				// Buscar linea donde se ha presionado Alt+Enter
+				// Buscar linea donde se ha presionado Ctrl+Enter
 				
 				if(textEditor.getCaretPosition() == 0)
 					return;
@@ -81,7 +81,7 @@ public class EstiloNotepadController implements Initializable, EventosAplicacion
 			}
 			
 			// Enviar mensaje
-			
+			cliente.getUsuario().getConexion().sendPeticion(new PeticionMensaje(msg));
 			
 	    }
 		
