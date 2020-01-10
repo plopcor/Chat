@@ -67,7 +67,6 @@ public class Cliente implements EventosAplicacion {
     	enviarDatosUsuario();
     	
     	String input;
-    	PeticionMensaje petMsg;
 
 		// Empezar lectura para enviar datos
         while (true) {
@@ -75,12 +74,8 @@ public class Cliente implements EventosAplicacion {
         	input = scn.nextLine().trim();
         	
         	// Crear PeticioMensaje con el mensaje
-        	if(!input.isEmpty()) {
-        		petMsg = new PeticionMensaje(input);
-        	
-        		// Enviar
-        		this.getUsuario().getConexion().sendPeticion(petMsg);
-        	}
+        	if(!input.isEmpty())
+        		this.getUsuario().getConexion().sendMensaje(input);
         }
     	
     }

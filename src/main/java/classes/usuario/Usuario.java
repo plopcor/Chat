@@ -1,7 +1,5 @@
 package classes.usuario;
 
-import java.net.Socket;
-
 import javax.net.ssl.SSLSocket;
 
 import classes.Perfil;

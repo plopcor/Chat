@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -15,6 +13,7 @@ import javax.net.ssl.SSLSocket;
 
 import classes.notificacion.Notificacion;
 import classes.peticion.Peticion;
+import classes.peticion.PeticionMensaje;
 
 public class Conexion implements Runnable {
 
@@ -95,15 +94,16 @@ public class Conexion implements Runnable {
 		} while (!salir);
 	}
 	
-	public void sendString(String data) {
+	public void sendMensaje(String data) {
 		data = data.trim();
 		
-		if(data.isEmpty())
+		if(data.isEmpty()) {
+			System.out.println("Error: El mensaje esta vacio");
 			return;
+		}
 		
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(this.getOutputStream()), true);
-		out.println(data);
-		out.flush();
+		// Enviar
+		this.sendPeticion(new PeticionMensaje(data));
 	}
 	
 	public void sendPeticion(Peticion peticion) {

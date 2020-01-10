@@ -17,7 +17,6 @@ public class Principal implements EventosAplicacion {
 	public static Scanner scn = new Scanner(System.in);
 
 
-	
 	public static void main(String[] args) {
 		new Principal().iniciar();
 	}
@@ -67,7 +66,7 @@ public class Principal implements EventosAplicacion {
 	@Override
 	public void onMensajeConAdjuntos(Usuario usuario, PeticionMensajeConAdjuntos peticion) {
 		System.out.println("[" + usuario.getPerfil().getNombre() + "]: " + peticion.getMensaje());
-		System.out.println("*Ajuntos*");
+		System.out.println("*Adjuntos*");
 	}
 
 	@Override
