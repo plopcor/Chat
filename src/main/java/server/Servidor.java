@@ -8,6 +8,7 @@ import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
 import classes.usuario.Usuario;
+import general.Utils;
 
 public class Servidor {
 	
@@ -20,12 +21,12 @@ public class Servidor {
     
     public Servidor(String ipAddress, int port) {
     	
-    	// Comprovar que el certificado existe
-    	if(getClass().getResource(SSL_KEY_PATH) == null) {
+    	// Comprovar que el certificado existe i cojer la ruta absoluta
+    	SSL_KEY_PATH = Utils.getResourceAbsolutePath(SSL_KEY_PATH);
+    	if(SSL_KEY_PATH.isEmpty()) {
     		System.err.println("No existe el certificado en la ruta => " + SSL_KEY_PATH);
     		System.exit(0);
-    	} else
-    		SSL_KEY_PATH = getClass().getResource(SSL_KEY_PATH).getPath();
+    	}
     	
     	// Certificado, SSL Key
     	System.setProperty("javax.net.ssl.trustStore", SSL_KEY_PATH);
@@ -49,6 +50,7 @@ public class Servidor {
     		
     	} catch (Exception e) {
     		System.err.println("Error al crear el servidor: " + e.getMessage());
+    		System.exit(0);
     	}
     	
     	backend = new Backend();

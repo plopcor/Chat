@@ -32,5 +32,15 @@ https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html#keytool_
 https://www.namecheap.com/support/knowledgebase/article.aspx/9952/67/supported-key-sizes-and-signature-algorithms-in-csrs
 
 @@@@@@@@@@@@
+
+## Quitar limitaciones de criptografia
+
+#### Windows
+# Ir a:
+	C:\Program Files\Java\jre1.8.0_212\lib\security
+# Descomentar linea 829:
+	#crypto.policy=unlimited
+
+#### Linux
  # Descomentar linea en "java.security" => /usr/lib/jvm/java-8-oracle/jre/lib/security/
-=> crypto.policy=unlimited
+	#crypto.policy=unlimited

@@ -13,6 +13,7 @@ import classes.notificacion.*;
 import classes.peticion.*;
 import classes.usuario.Usuario;
 import general.EventosAplicacion;
+import general.Utils;
 import gestores.GestorGeneral;
 
 public class Cliente implements EventosAplicacion {
@@ -23,18 +24,18 @@ public class Cliente implements EventosAplicacion {
     private GestorGeneral gestor;
     private EventosAplicacion eventos;
      
- // SSL Key
+    // SSL Key
     private String SSL_KEY_PATH = "/cliente/ssl_rsa_cert.p12";
     private String SSL_KEY_PASSWORD = "123456";
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         
-    	// Comprovar que el certificado existe
-    	if(getClass().getResource(SSL_KEY_PATH) == null) {
+    	// Comprovar que el certificado existe i cojer la ruta absoluta
+    	SSL_KEY_PATH = Utils.getResourceAbsolutePath(SSL_KEY_PATH);
+    	if(SSL_KEY_PATH.isEmpty()) {
     		System.err.println("No existe el certificado en la ruta => " + SSL_KEY_PATH);
     		System.exit(0);
-    	} else
-    		SSL_KEY_PATH = getClass().getResource(SSL_KEY_PATH).getPath();
+    	}
     	
     	// Set SSL key
     	System.setProperty("javax.net.ssl.trustStore", SSL_KEY_PATH);

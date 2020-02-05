@@ -32,13 +32,18 @@ public class Principal implements EventosAplicacion {
 				port = scn.nextInt();
 				
 			} catch (InputMismatchException e) {
-				System.err.println("Numero de puerto no valido, valido de 0 a 65535");
+//				System.err.println("Numero de puerto no valido, ha de ser numerico entre 0 a 65535");
 				port = -1;
 			}
 
-			scn.nextLine();
+			if(port < 0 || port > 65535) {
+				System.err.println("Numero de puerto no valido, valido de 0 a 65535");
+			}
 			
-		} while (port < 0);
+			scn.nextLine();
+			System.out.println();
+			
+		} while (port < 0 || port > 65535);
 		
 		
 		
@@ -46,7 +51,7 @@ public class Principal implements EventosAplicacion {
 		Servidor srv = new Servidor(null, port);
         System.out.println("Servidor iniciado");
         try {
-            System.out.println("- Host: " + srv.getSocketAddress().getHostAddress());        	
+            System.out.println("- Host: " + srv.getSocketAddress().getHostAddress() + " => " + srv.getSocketAddress().getCanonicalHostName() + " => " + srv.getSocketAddress().getHostName());        	
             System.out.println("- Port: " + srv.getPort());
              
         } catch (Exception e) {
