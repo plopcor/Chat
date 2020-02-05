@@ -23,16 +23,23 @@ public class Cliente implements EventosAplicacion {
     private GestorGeneral gestor;
     private EventosAplicacion eventos;
      
-    // SSL Key
- 	private final String SSL_KEY = getClass().getResource("/cliente/ssl_rsa_cert.p12").getPath();
- 	private final String SSL_KEY_PASSWORD = "123456";
+ // SSL Key
+    private String SSL_KEY_PATH = "/cliente/ssl_rsa_cert.p12";
+    private String SSL_KEY_PASSWORD = "123456";
     
     public Cliente (InetAddress serverAddress, int serverPort) {
         
+    	// Comprovar que el certificado existe
+    	if(getClass().getResource(SSL_KEY_PATH) == null) {
+    		System.err.println("No existe el certificado en la ruta => " + SSL_KEY_PATH);
+    		System.exit(0);
+    	} else
+    		SSL_KEY_PATH = getClass().getResource(SSL_KEY_PATH).getPath();
+    	
     	// Set SSL key
-    	System.setProperty("javax.net.ssl.trustStore", SSL_KEY);
+    	System.setProperty("javax.net.ssl.trustStore", SSL_KEY_PATH);
 		System.setProperty("javax.net.ssl.trustStorePassword", SSL_KEY_PASSWORD);
-		System.setProperty("javax.net.ssl.keyStore", SSL_KEY);
+		System.setProperty("javax.net.ssl.keyStore", SSL_KEY_PATH);
 		System.setProperty("javax.net.ssl.keyStorePassword", SSL_KEY_PASSWORD);
     	
     	try {

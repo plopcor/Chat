@@ -2,6 +2,8 @@ package server;
 
 import java.util.ArrayList;
 
+import javax.net.ssl.SSLSocket;
+
 import classes.peticion.*;
 import classes.notificacion.*;
 import classes.usuario.Usuario;
@@ -28,6 +30,12 @@ public class Backend implements EventosAplicacion {
     //
     // METODOS
     //
+    
+    public void aceptarConexion(SSLSocket sslsocket) {
+    	
+    	
+    	
+    }
     
     public void conectarUsuario(Usuario usuario) {
     	

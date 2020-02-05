@@ -40,6 +40,8 @@ public class Principal implements EventosAplicacion {
 			
 		} while (port < 0);
 		
+		
+		
 		// Iniciar servidor
 		Servidor srv = new Servidor(null, port);
         System.out.println("Servidor iniciado");

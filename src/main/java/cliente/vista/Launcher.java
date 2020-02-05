@@ -40,8 +40,8 @@ public class Launcher extends Application {
 		// Cargar primera escena
 		
 		stage.setTitle("Chat - Conexion");
-		setEscena(EnumEscenas.CHAT_Notepad);
-		//setEscena(EnumEscenas.CONEXION);
+		//setEscena(EnumEscenas.CHAT_Notepad);
+		setEscena(EnumEscenas.CONEXION);
 		
 		stage.show();
 	}

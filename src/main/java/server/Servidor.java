@@ -15,15 +15,22 @@ public class Servidor {
     private Backend backend;
     
     // SSL Key
- 	private final String SSL_KEY = getClass().getResource("/servidor/ssl_rsa_cert.p12").getPath();
- 	private final String SSL_KEY_PASSWORD = "123456";
+    private String SSL_KEY_PATH = "/servidor/ssl_rsa_cert.p12";
+    private String SSL_KEY_PASSWORD = "123456";
     
     public Servidor(String ipAddress, int port) {
     	
+    	// Comprovar que el certificado existe
+    	if(getClass().getResource(SSL_KEY_PATH) == null) {
+    		System.err.println("No existe el certificado en la ruta => " + SSL_KEY_PATH);
+    		System.exit(0);
+    	} else
+    		SSL_KEY_PATH = getClass().getResource(SSL_KEY_PATH).getPath();
+    	
     	// Certificado, SSL Key
-    	System.setProperty("javax.net.ssl.trustStore", SSL_KEY);
+    	System.setProperty("javax.net.ssl.trustStore", SSL_KEY_PATH);
 		System.setProperty("javax.net.ssl.trustStorePassword", SSL_KEY_PASSWORD);
-		System.setProperty("javax.net.ssl.keyStore", SSL_KEY);
+		System.setProperty("javax.net.ssl.keyStore", SSL_KEY_PATH);
 		System.setProperty("javax.net.ssl.keyStorePassword", SSL_KEY_PASSWORD);
 		
     	
