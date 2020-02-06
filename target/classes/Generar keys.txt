@@ -1,1 +1,0 @@
-keytool -genkeypair -alias Servidor -keyalg RSA -sigalg SHA384withRSA -keysize 2048 -keystore ssl_rsa_cert.p12 -storetype pkcs12 -v -storepass 123456 -validity 10000 -ext san=ip:127.0.0.1

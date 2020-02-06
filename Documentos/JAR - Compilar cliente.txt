@@ -1,0 +1,7 @@
+
+# Ir a la ruta:
+<Proyecto>/target/classes
+
+# CMD
+jar cvfm Cliente.jar manifest_cliente.txt classes/* cliente/Cliente.class cliente/Principal.class cliente/ssl_rsa_cert.p12 general/*
+

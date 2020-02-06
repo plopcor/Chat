@@ -1,0 +1,7 @@
+
+# Ir a la ruta:
+<Proyecto>/target/classes
+
+# CMD
+jar cvfm Servidor.jar manifest_servidor.txt  servidor/Servidor.class servidor/Principal.class servidor/Backend.class servidor/ssl_rsa_cert.p12 gestores/* classes/* general/*
+
