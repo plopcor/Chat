@@ -25,7 +25,7 @@ public class Cliente implements EventosAplicacion {
     private EventosAplicacion eventos;
      
     // SSL Key
-    private String SSL_KEY_PATH = "/cliente/ssl_rsa_cert.p12";
+    private String SSL_KEY_PATH = "/cliente/certificados/ssl_rsa_cert.p12";
     private String SSL_KEY_PASSWORD = "123456";
     
     public Cliente (InetAddress serverAddress, int serverPort) {

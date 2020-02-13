@@ -16,7 +16,7 @@ public class Servidor {
     private Backend backend;
     
     // SSL Key
-    private String SSL_KEY_PATH = "/servidor/ssl_rsa_cert.p12";
+    private String SSL_KEY_PATH = "/servidor/certificados/ssl_rsa_cert.p12";
     private String SSL_KEY_PASSWORD = "123456";
     
     public Servidor(String ipAddress, int port) {
