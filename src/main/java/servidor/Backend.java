@@ -17,12 +17,15 @@ public class Backend implements EventosAplicacion {
     private boolean debugMode = true;
     private GestorGeneral gestor;
     
+    
     //
     // CONSTRUCTOR
+    //
     public Backend() {
     	
     	// Crear gestor del servidor (este objeto sera el event-handler)
     	gestor = new GestorGeneral(this);
+    	
     	// Lista de usuarios
     	usuarios = new ArrayList<Usuario>();
     }

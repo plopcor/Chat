@@ -30,9 +30,8 @@ public class Principal implements EventosAplicacion {
 
 			try {
 				port = scn.nextInt();
-				
+
 			} catch (InputMismatchException e) {
-//				System.err.println("Numero de puerto no valido, ha de ser numerico entre 0 a 65535");
 				port = -1;
 			}
 
@@ -46,22 +45,34 @@ public class Principal implements EventosAplicacion {
 		} while (port < 0 || port > 65535);
 		
 		
+		String[] certificado = new String[2];
+		
+		//System.out.println("[Certificado] Ruta del certificado:");
+		certificado[0] = "/servidor/certificados/ssl_rsa_cert.p12";
+		
+		//System.out.println("[Certificado] Contraseña:");
+		certificado[1] = "12345";
+		
+		
 		
 		// Iniciar servidor
-		Servidor srv = new Servidor(null, port);
-        System.out.println("Servidor iniciado");
+		Servidor srv;
         try {
+        	
+        	srv = new Servidor(null, port, certificado);
+
+        	System.out.println("Servidor iniciado");
             System.out.println("- Host: " + srv.getSocketAddress().getHostAddress() + " => " + srv.getSocketAddress().getCanonicalHostName() + " => " + srv.getSocketAddress().getHostName());        	
             System.out.println("- Port: " + srv.getPort());
              
+            // Recojer eventos del backend
+            //srv.getBackend().setEventos(this);
+        
+            srv.listen();
+            
         } catch (Exception e) {
         	System.out.println("Error: " + e.getMessage());
         }
-        
-        // Recojer eventos del backend
-        //srv.getBackend().setEventos(this);
-    
-        srv.listen();
 		
 	}
 
@@ -79,7 +90,6 @@ public class Principal implements EventosAplicacion {
 	@Override
 	public void onDatosUsuario(Usuario usuario, PeticionDatosUsuario peticion) {
 		System.out.println("Informacion de perfil cambiada => " + peticion.getPerfil().getNombre());
-		
 	}
 
 	@Override

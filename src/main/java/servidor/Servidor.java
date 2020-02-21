@@ -16,17 +16,22 @@ public class Servidor {
     private Backend backend;
     
     // SSL Key
-    private String SSL_KEY_PATH = "/servidor/certificados/ssl_rsa_cert.p12";
-    private String SSL_KEY_PASSWORD = "123456";
+    private String SSL_KEY_PATH;
+    private String SSL_KEY_PASSWORD;
     
-    public Servidor(String ipAddress, int port) {
+    public Servidor(String ipAddress, int port, String[] certificado) {
     	
-    	// Comprovar que el certificado existe i cojer la ruta absoluta
-    	SSL_KEY_PATH = Utils.getResourceAbsolutePath(SSL_KEY_PATH);
-    	if(SSL_KEY_PATH.isEmpty()) {
-    		System.err.println("No existe el certificado en la ruta => " + SSL_KEY_PATH);
-    		System.exit(0);
-    	}
+    	// Comprovaciones
+    	if(port < 0 || port > 65535)
+    		throw new IllegalArgumentException("El puerto ha de estar entre 0 y 65535");
+    	
+    	// Comprovar que la ruta existe
+    	if(! Utils.checkFileExists(certificado[0]))
+    		throw new IllegalArgumentException("No se ha encontrado el certificado en la ruta");
+    	
+    	// Ruta y contraseña del certificado
+    	SSL_KEY_PATH = certificado[0];
+    	SSL_KEY_PASSWORD = certificado[1];
     	
     	// Certificado, SSL Key
     	System.setProperty("javax.net.ssl.trustStore", SSL_KEY_PATH);
@@ -43,17 +48,12 @@ public class Servidor {
             socket.setEnabledCipherSuites(new String[] {"TLS_RSA_WITH_AES_256_GCM_SHA384", "TLS_RSA_WITH_AES_256_CBC_SHA256"});  //TLS_RSA_WITH_AES_256_CBC_SHA //, "TLS_AES_128_GCM_SHA256"});
             
             this.server = socket;
-			
-    	} catch (IllegalArgumentException e) {
-    		System.err.println("Error, el puerto ha de estar entre 0 y 65535");
-    		e.printStackTrace();
-    		
+            this.backend = new Backend();
+
     	} catch (Exception e) {
-    		System.err.println("Error al crear el servidor: " + e.getMessage());
-    		System.exit(0);
+    		System.err.println("Error al crear el servidor");
     	}
     	
-    	backend = new Backend();
     }
     
     
@@ -68,15 +68,15 @@ public class Servidor {
 				// Aceptar conexion del cliente
 				cliente = (SSLSocket) this.server.accept();
 				
-				// Crear nuevo cliente conectado
+				// Crear nuevo usuario (cliente conectado)
 				Usuario usuarioConectado = new Usuario(cliente);
 				
-				// AÃ±adir a la lista i empezar a leer datos
+				// Añadir a la lista i empezar a leer datos
 				backend.conectarUsuario(usuarioConectado);
 				
 			} catch (IOException e) {
 				System.err.println("Error al aceptar conexion de un cliente");
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			}
 			
         } while (true);
