@@ -1,5 +1,6 @@
 package cliente;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Scanner;
@@ -25,17 +26,34 @@ public class Cliente implements EventosAplicacion {
     private EventosAplicacion eventos;
      
     // SSL Key
-    private String SSL_KEY_PATH = "/cliente/certificados/ssl_rsa_cert.p12";
-    private String SSL_KEY_PASSWORD = "123456";
+    private String SSL_KEY_PATH;
+    private String SSL_KEY_PASSWORD;
     
-    public Cliente (InetAddress serverAddress, int serverPort) {
+    public Cliente (InetAddress serverAddress, int serverPort, String[] certificado) {
         
-    	// Comprovar que el certificado existe i cojer la ruta absoluta
-    	SSL_KEY_PATH = Utils.getResourceAbsolutePath(SSL_KEY_PATH);
-    	if(SSL_KEY_PATH.isEmpty()) {
-    		System.err.println("No existe el certificado en la ruta => " + SSL_KEY_PATH);
-    		System.exit(0);
-    	}
+    	// Comprovaciones
+    	if(serverPort < 0 || serverPort > 65535)
+    		throw new IllegalArgumentException("El puerto ha de estar entre 0 y 65535");
+    	
+    	try {
+    		
+    		// Resolver ruta
+    		SSL_KEY_PATH = new File(certificado[0]).getCanonicalFile().getAbsolutePath();
+        	SSL_KEY_PASSWORD = certificado[1];
+    		
+    		// Comprovar que la ruta existe
+        	if(! Utils.checkFileExists(SSL_KEY_PATH))
+        		throw new IllegalArgumentException("No se ha encontrado el certificado en la ruta => " + SSL_KEY_PATH);
+    		
+        	// Comprovar que la contraseña es valida
+    		if(!Utils.validateKeystorePassword(SSL_KEY_PATH, SSL_KEY_PASSWORD)) {
+    			throw new IOException("Contraseña del certificado invalida");
+    		}
+        	
+		} catch (IOException e1) {
+			throw new IllegalArgumentException("Error al leer el certificado => " + e1.getMessage());
+		}
+
     	
     	// Set SSL key
     	System.setProperty("javax.net.ssl.trustStore", SSL_KEY_PATH);
@@ -59,7 +77,7 @@ public class Cliente implements EventosAplicacion {
         	this.usuario.setEventos(gestor);
         	
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new NullPointerException("Error al crear el cliente => " + e.getMessage());
 		}       
     }
     

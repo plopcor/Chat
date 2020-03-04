@@ -55,15 +55,22 @@ public class Principal implements EventosAplicacion {
 			}
 			
 		} while(port < 0);
+	
 		
+		String[] certificado = new String[2];
+			
+		//System.out.println("[Certificado] Ruta del certificado:");
+		certificado[0] = "./certificados/ssl_rsa_cert.p12";
 		
+		//System.out.println("[Certificado] Contraseña:");
+		certificado[1] = "12345";
 		
-		// Abrir conexion
-		
+
+		// Crear cliente
 		Cliente client = null;
 		try {
 			
-			client = new Cliente(ip, port);
+			client = new Cliente(ip, port, certificado);
 			System.out.println("[Conectado] Servidor: " + client.getUsuario().getConexion().getSocket().getInetAddress());
 			
 			// Recojer eventos del cliente

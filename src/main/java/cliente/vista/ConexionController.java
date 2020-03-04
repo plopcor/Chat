@@ -61,8 +61,16 @@ public class ConexionController {
 			return;
 		}
 		
+		String[] certificado = new String[2];
+		
+		//System.out.println("[Certificado] Ruta del certificado:");
+		certificado[0] = "./certificados/ssl_rsa_cert.p12";
+		
+		//System.out.println("[Certificado] Contraseña:");
+		certificado[1] = "12345";
+		
 		// Crear conexion
-		Launcher.getAplicacion().setCliente(new Cliente(ip, port));
+		Launcher.getAplicacion().setCliente(new Cliente(ip, port, certificado));
 		
 		// Mostrar chat
 		Launcher.getAplicacion().setEscena(EnumEscenas.CHAT);

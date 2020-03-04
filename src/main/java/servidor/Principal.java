@@ -48,10 +48,10 @@ public class Principal implements EventosAplicacion {
 		String[] certificado = new String[2];
 		
 		//System.out.println("[Certificado] Ruta del certificado:");
-		certificado[0] = "/servidor/certificados/ssl_rsa_cert.p12";
+		certificado[0] = "./certificados/ssl_rsa_cert.p12";
 		
 		//System.out.println("[Certificado] Contraseña:");
-		certificado[1] = "12345";
+		certificado[1] = "123456";
 		
 		
 		
@@ -71,7 +71,7 @@ public class Principal implements EventosAplicacion {
             srv.listen();
             
         } catch (Exception e) {
-        	System.out.println("Error: " + e.getMessage());
+        	System.err.println("Error: " + e.getMessage());
         }
 		
 	}

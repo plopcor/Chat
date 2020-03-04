@@ -1,5 +1,6 @@
 package servidor;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -25,14 +26,27 @@ public class Servidor {
     	if(port < 0 || port > 65535)
     		throw new IllegalArgumentException("El puerto ha de estar entre 0 y 65535");
     	
-    	// Comprovar que la ruta existe
-    	if(! Utils.checkFileExists(certificado[0]))
-    		throw new IllegalArgumentException("No se ha encontrado el certificado en la ruta");
+		try {
+
+			// Resolver ruta
+			SSL_KEY_PATH = new File(certificado[0]).getCanonicalFile().getAbsolutePath();
+			SSL_KEY_PASSWORD = certificado[1];
+
+			// Comprovar que la ruta existe
+			if (!Utils.checkFileExists(SSL_KEY_PATH))
+				throw new IllegalArgumentException("No se ha encontrado el certificado en la ruta => " + SSL_KEY_PATH);
+
+			// Comprovar que la contraseña es valida
+			if(!Utils.validateKeystorePassword(SSL_KEY_PATH, SSL_KEY_PASSWORD)) {
+				throw new IOException("Contraseña del certificado invalida");
+			}
+		
+		} catch (IOException e1) {
+			throw new IllegalArgumentException("Error al leer el certificado => " + e1.getMessage());
+		}
     	
-    	// Ruta y contraseña del certificado
-    	SSL_KEY_PATH = certificado[0];
-    	SSL_KEY_PASSWORD = certificado[1];
-    	
+		
+		
     	// Certificado, SSL Key
     	System.setProperty("javax.net.ssl.trustStore", SSL_KEY_PATH);
 		System.setProperty("javax.net.ssl.trustStorePassword", SSL_KEY_PASSWORD);
@@ -51,7 +65,7 @@ public class Servidor {
             this.backend = new Backend();
 
     	} catch (Exception e) {
-    		System.err.println("Error al crear el servidor");
+    		throw new NullPointerException("Error al crear el servidor => " + e.getMessage());
     	}
     	
     }
