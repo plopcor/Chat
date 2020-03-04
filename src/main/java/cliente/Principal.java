@@ -19,19 +19,15 @@ public class Principal implements EventosAplicacion {
 	public static Scanner scn = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		new Principal().iniciar();
-	}
-	
-	public void iniciar() {
-		
+
 		InetAddress ip;
-		int port;
+		Integer port;
+		String[] certificado = new String[2];
 		
 		// Pedir IP i puerto del servidor
 		do {
 
 			System.out.print("\nIP del servidor: ");
-			
 			try {
 				ip = InetAddress.getByName(scn.nextLine());
 				
@@ -40,7 +36,11 @@ public class Principal implements EventosAplicacion {
 				//e.printStackTrace();
 				ip = null;
 			}
+			
 		} while(ip == null);
+		
+		
+		// Puerto
 		
 		do {
 			
@@ -57,13 +57,14 @@ public class Principal implements EventosAplicacion {
 		} while(port < 0);
 	
 		
-		String[] certificado = new String[2];
 			
+		// Certificado
+		
 		//System.out.println("[Certificado] Ruta del certificado:");
 		certificado[0] = "./certificados/ssl_rsa_cert.p12";
 		
 		//System.out.println("[Certificado] Contraseña:");
-		certificado[1] = "12345";
+		certificado[1] = "123456";
 		
 
 		// Crear cliente
@@ -82,8 +83,9 @@ public class Principal implements EventosAplicacion {
 			e.printStackTrace();
 			System.err.println("Error al conectarse al servidor");
 		}
-
+		
 	}
+
 
 	@Override
 	public void onMensaje(Usuario usuario, PeticionMensaje peticion) {

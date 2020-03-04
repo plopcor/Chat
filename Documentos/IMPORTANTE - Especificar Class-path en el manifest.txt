@@ -1,0 +1,3 @@
+http://todayguesswhat.blogspot.com/2011/03/jar-manifestmf-class-path-referencing.html
+https://docs.oracle.com/javase/tutorial/deployment/jar/downman.html
+https://docs.oracle.com/javase/tutorial/deployment/jar/downman.html
